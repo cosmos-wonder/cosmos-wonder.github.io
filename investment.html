@@ -61,6 +61,16 @@
       gap: 4px;
     }
 
+    .logo-container a {
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .logo-container a:hover {
+      opacity: 0.7;
+    }
+
     .logo-text-container {
       display: flex;
       flex-direction: column;
@@ -242,10 +252,12 @@
   <header>
     <div class="header-container">
       <div class="logo-container">
-        <div class="logo-text-container">
-          <div class="logo-text">Cosmos of WW</div>
-          <div class="logo-subtitle">Along with Probability</div>
-        </div>
+        <a href="index.html">
+          <div class="logo-text-container">
+            <div class="logo-text">Cosmos of WW</div>
+            <div class="logo-subtitle">Along with Probability</div>
+          </div>
+        </a>
       </div>
       <nav>
         <ul>

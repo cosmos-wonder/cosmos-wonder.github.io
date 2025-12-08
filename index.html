@@ -61,6 +61,16 @@
       gap: 15px;
     }
 
+    .logo-container a {
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .logo-container a:hover {
+      opacity: 0.7;
+    }
+
     .logo {
       width: auto;
       height: auto;
@@ -249,6 +259,27 @@
       color: #000;
     }
 
+    .module-card .sub-pages {
+      margin: 16px 0;
+      padding-top: 12px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .module-card .sub-pages a {
+      display: block;
+      color: #000;
+      text-decoration: none;
+      font-size: 0.9em;
+      margin-bottom: 8px;
+      padding: 4px 0;
+      transition: opacity 0.2s;
+    }
+
+    .module-card .sub-pages a:hover {
+      opacity: 0.6;
+      text-decoration: underline;
+    }
+
     .module-card a {
       color: #000;
       text-decoration: none;
@@ -309,10 +340,12 @@
   <header>
     <div class="header-container">
       <div class="logo-container">
-        <div class="logo-text-container">
-          <div class="logo-text">Cosmos of WW</div>
-          <div class="logo-subtitle">Along with Probability</div>
-        </div>
+        <a href="index.html">
+          <div class="logo-text-container">
+            <div class="logo-text">Cosmos of WW</div>
+            <div class="logo-subtitle">Along with Probability</div>
+          </div>
+        </a>
       </div>
       <nav>
         <ul>
@@ -335,23 +368,22 @@
       <div class="module-card" id="about">
         <h3><span class="icon">❓</span> 关于我</h3>
         <p>记录个人所思所想、感悟总结的空间</p>
-        <ul>
-          <li>个人思考</li>
-          <li>生活感悟</li>
-          <li>成长记录</li>
-        </ul>
+        <div class="sub-pages">
+          <a href="blog-origin.html">博客的前因</a>
+          <a href="personal-iteration.html">个人迭代历史</a>
+        </div>
         <a href="about.html">了解更多关于我 →</a>
       </div>
 
       <div class="module-card" id="investment">
         <h3><span class="icon">📈</span> 投资记录</h3>
         <p>记录投资学习与实践过程中的思考与总结</p>
-        <ul>
-          <li>市场观察</li>
-          <li>投资策略</li>
-          <li>案例分析</li>
-          <li>心得体会</li>
-        </ul>
+        <div class="sub-pages">
+          <a href="investment/my-view.html">我对投资的看法</a>
+          <a href="investment/options-learning.html">期权学习</a>
+          <a href="investment/industry-analysis.html">行业分析</a>
+          <a href="investment/company-analysis.html">公司分析</a>
+        </div>
         <a href="investment.html">查看记录 →</a>
       </div>
 
