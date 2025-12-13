@@ -352,6 +352,7 @@
           <li><a href="index.html">首页</a></li>
           <li><a href="about.html">关于我</a></li>
           <li><a href="investment.html">投资记录</a></li>
+          <li><a href="thinking.html">思维漫步</a></li>
           <li>
             <select id="lang-switcher">
               <option value="traditional">繁體中文</option>
@@ -365,14 +366,14 @@
 
   <main>
     <section class="modules">
-      <div class="module-card" id="about">
+      <div class="module-card" id="about" onclick="window.location.href='about.html'">
         <h3><span class="icon">⭐️</span> 关于我</h3>
         <p>记录个人所思所想、感悟总结的空间</p>
         <div class="sub-pages">
-          <a href="blog-origin.html">博客的前因</a>
-          <a href="personal-iteration.html">个人迭代历史</a>
+          <a href="blog-origin.html" onclick="event.stopPropagation()">博客的前因</a>
+          <a href="personal-iteration.html" onclick="event.stopPropagation()">个人迭代历史</a>
         </div>
-        <a href="about.html">了解更多关于我 →</a>
+        <a href="about.html" onclick="event.stopPropagation()">了解更多关于我 →</a>
       </div>
 
       <div class="module-card" id="investment">
@@ -385,6 +386,14 @@
           <a href="investment/company-analysis.html">公司分析</a>
         </div>
         <a href="investment.html">查看记录 →</a>
+      </div>
+
+      <div class="module-card" id="thinking">
+        <h3><span class="icon">🧠</span> 思维漫步</h3>
+        <p>记录思维探索与思考的旅程</p>
+        <div class="sub-pages">
+          <a href="thinking.html">查看思维漫步 →</a>
+        </div>
       </div>
 
     </section>
@@ -411,18 +420,24 @@
       });
     });
 
-    // 卡片点击效果
+    // 卡片点击效果 - 处理没有onclick的卡片
     document.querySelectorAll('.module-card').forEach(card => {
-      card.addEventListener('click', function() {
-        const id = this.id;
-        const section = document.getElementById(id);
-        if (section) {
-          section.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
-      });
+      if (!card.onclick) {
+        card.addEventListener('click', function(e) {
+          // 如果点击的是链接，不处理
+          if (e.target.tagName === 'A') {
+            return;
+          }
+          const id = this.id;
+          const section = document.getElementById(id);
+          if (section) {
+            section.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      }
     });
   </script>
 </body>
