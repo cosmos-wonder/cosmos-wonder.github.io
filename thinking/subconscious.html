@@ -1,0 +1,1774 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>关于潜意识 - Cosmos of WW</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Georgia', serif;
+      line-height: 1.6;
+      color: #000;
+      background: #FAFAFA;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../assets/images/logo.svg');
+      background-repeat: no-repeat;
+      background-position: right bottom;
+      background-size: 400px;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .logo-text-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .logo-text {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #000;
+      font-family: 'Georgia', serif;
+      line-height: 1.2;
+    }
+
+    .logo-subtitle {
+      font-size: 0.9em;
+      font-weight: 400;
+      color: #666;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      line-height: 1.2;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    /* 认证 UI */
+    .auth-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .auth-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9em;
+    }
+
+    .auth-user img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+
+    .auth-btn {
+      padding: 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: transparent;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .auth-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .role-badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 500;
+    }
+
+    .role-badge.admin {
+      background: #28a745;
+      color: white;
+    }
+
+    .role-badge.guest {
+      background: #6c757d;
+      color: white;
+    }
+
+    /* 权限控制：只读模式 */
+    .read-only input,
+    .read-only select,
+    .read-only textarea {
+      pointer-events: none;
+      background: #f5f5f5;
+      color: #666;
+    }
+
+    .read-only button.admin-only {
+      display: none;
+    }
+
+    nav a {
+      color: #000;
+      text-decoration: none;
+      font-size: 0.95em;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+
+    nav a:hover {
+      opacity: 0.7;
+    }
+
+    nav a.active {
+      opacity: 0.5;
+    }
+
+    #lang-switcher {
+      padding: 6px 30px 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+    }
+
+    #lang-switcher:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    #lang-switcher:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .intro-section h1 {
+      font-size: 3.5em;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 50px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section p {
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.9;
+      margin-bottom: 25px;
+    }
+
+    .intro-section h2 {
+      font-size: 1.8em;
+      font-weight: 400;
+      margin-top: 50px;
+      margin-bottom: 25px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section h3 {
+      font-size: 1.4em;
+      font-weight: 400;
+      margin-top: 35px;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section h4 {
+      font-size: 1.2em;
+      font-weight: 400;
+      margin-top: 25px;
+      margin-bottom: 15px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 20px 0;
+    }
+
+    .intro-section ul li {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    .intro-section ul li:before {
+      content: "•";
+      position: absolute;
+      left: 0;
+      color: #000;
+    }
+
+    .intro-section ol {
+      padding-left: 30px;
+      margin: 20px 0;
+    }
+
+    .intro-section ol li {
+      padding: 8px 0;
+      color: #333;
+      line-height: 1.8;
+    }
+
+    .intro-section hr {
+      border: none;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      margin: 30px 0;
+    }
+
+    .intro-section strong {
+      font-weight: 600;
+      color: #000;
+    }
+
+    /* 目录样式 */
+    .table-of-contents {
+      background: rgba(0, 0, 0, 0.02);
+      border-left: 3px solid rgba(0, 0, 0, 0.2);
+      padding: 25px 30px;
+      margin: 40px 0;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .table-of-contents h2 {
+      font-size: 1.3em;
+      margin-top: 0;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .table-of-contents ul {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    .table-of-contents > ul {
+      margin-left: 0;
+    }
+
+    .table-of-contents ul ul {
+      margin-left: 20px;
+      margin-top: 8px;
+    }
+
+    .table-of-contents li {
+      padding: 6px 0;
+      padding-left: 0;
+      position: relative;
+    }
+
+    .table-of-contents li:before {
+      display: none;
+    }
+
+    .table-of-contents a {
+      color: #333;
+      text-decoration: none;
+      font-size: 0.95em;
+      transition: opacity 0.2s;
+      display: inline-block;
+    }
+
+    .table-of-contents a:hover {
+      opacity: 0.6;
+      text-decoration: underline;
+    }
+
+    .table-of-contents .toc-h2 {
+      font-weight: 500;
+      margin-top: 12px;
+    }
+
+    .table-of-contents .toc-h2:first-child {
+      margin-top: 0;
+    }
+
+    .table-of-contents .toc-h3 {
+      font-weight: 400;
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    .table-of-contents .toc-h4 {
+      font-weight: 400;
+      color: #888;
+      font-size: 0.85em;
+    }
+
+    /* 平滑滚动 */
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* 标题锚点偏移（因为 sticky header） */
+    .intro-section h2[id],
+    .intro-section h3[id],
+    .intro-section h4[id] {
+      scroll-margin-top: 100px;
+    }
+
+    /* 追踪表格样式 */
+    .tracking-table-container {
+      margin: 40px 0;
+      overflow-x: auto;
+    }
+
+    .tracking-table {
+      width: 100%;
+      border-collapse: collapse;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      background: #fff;
+      font-size: 0.9em;
+    }
+
+    .tracking-table th {
+      background: rgba(0, 0, 0, 0.05);
+      padding: 12px 8px;
+      text-align: left;
+      font-weight: 600;
+      color: #000;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      white-space: nowrap;
+    }
+
+    .tracking-table td {
+      padding: 10px 8px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      vertical-align: top;
+    }
+
+    .tracking-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .tracking-table input[type="date"],
+    .tracking-table input[type="text"],
+    .tracking-table textarea {
+      width: 100%;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      padding: 6px 8px;
+      font-size: 0.9em;
+      font-family: inherit;
+      background: #fff;
+      border-radius: 3px;
+    }
+
+    .tracking-table input[type="date"] {
+      cursor: pointer;
+    }
+
+    .tracking-table input[type="text"]:focus,
+    .tracking-table textarea:focus,
+    .tracking-table input[type="date"]:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.4);
+    }
+
+    .tracking-table textarea {
+      resize: vertical;
+      min-height: 60px;
+    }
+
+    .tracking-table .yes-no-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .tracking-table .yes-no-group label {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      font-size: 0.9em;
+    }
+
+    .tracking-table .yes-no-group input[type="radio"] {
+      width: auto;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .tracking-table .delete-btn {
+      background: rgba(255, 0, 0, 0.1);
+      color: #d00;
+      border: 1px solid rgba(255, 0, 0, 0.3);
+      padding: 4px 8px;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 0.85em;
+      transition: all 0.2s;
+    }
+
+    .tracking-table .delete-btn:hover {
+      background: rgba(255, 0, 0, 0.2);
+      border-color: rgba(255, 0, 0, 0.5);
+    }
+
+    .tracking-table-actions {
+      margin-top: 20px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .tracking-table-actions button {
+      background: #000;
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95em;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .tracking-table-actions button:hover {
+      opacity: 0.8;
+    }
+
+    .tracking-table-actions .add-btn {
+      background: #000;
+    }
+
+    .tracking-table-actions .preview-btn {
+      background: rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    .tracking-table-actions .preview-btn:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .tracking-table-actions .save-btn {
+      background: #000;
+      color: #fff;
+    }
+
+    .tracking-table-actions .show-more-btn {
+      background: rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    .tracking-table-actions .show-more-btn:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    /* 折叠行样式 */
+    .tracking-table tbody tr.hidden-row {
+      display: none;
+    }
+
+    /* 预览模态框样式 */
+    .preview-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .preview-modal.active {
+      display: flex;
+    }
+
+    .preview-modal-content {
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      max-width: 800px;
+      max-height: 80vh;
+      overflow-y: auto;
+      width: 90%;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .preview-modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-modal-header h3 {
+      font-size: 1.5em;
+      font-weight: 400;
+      margin: 0;
+      font-family: 'Georgia', serif;
+    }
+
+    .preview-modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5em;
+      cursor: pointer;
+      color: #666;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .preview-modal-close:hover {
+      color: #000;
+    }
+
+    .preview-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+    }
+
+    .preview-table th,
+    .preview-table td {
+      padding: 12px;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      text-align: left;
+    }
+
+    .preview-table th {
+      background: rgba(0, 0, 0, 0.05);
+      font-weight: 600;
+    }
+
+    .preview-table tr:nth-child(even) {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    .preview-modal-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .preview-modal-actions button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.95em;
+      font-family: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .preview-modal-actions .confirm-btn {
+      background: #000;
+      color: #fff;
+    }
+
+    .preview-modal-actions .confirm-btn:hover {
+      opacity: 0.8;
+    }
+
+    .preview-modal-actions .cancel-btn {
+      background: rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    .preview-modal-actions .cancel-btn:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    @media (max-width: 768px) {
+      .tracking-table-container {
+        overflow-x: scroll;
+      }
+
+      .tracking-table {
+        min-width: 800px;
+      }
+
+      .tracking-table th,
+      .tracking-table td {
+        padding: 8px 6px;
+        font-size: 0.85em;
+      }
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 50px;
+      color: #000;
+      text-decoration: underline;
+      font-size: 1em;
+      font-weight: 400;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    /* Footer */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+    }
+
+    footer p {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      main {
+        padding: 60px 20px;
+      }
+
+      .intro-section h1 {
+        font-size: 2.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="../index.html">
+          <div class="logo-text-container">
+            <div class="logo-text">Cosmos of WW</div>
+            <div class="logo-subtitle">Along with Probability</div>
+          </div>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="../index.html">首页</a></li>
+          <li><a href="../about/">关于我</a></li>
+          <li><a href="../investment/">投资记录</a></li>
+          <li><a href="../thinking/">思维漫步</a></li>
+          <li>
+            <select id="lang-switcher">
+              <option value="traditional">繁體中文</option>
+              <option value="simplified">简体中文</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
+      <div class="auth-container" id="authContainer">
+        <button class="auth-btn" id="loginBtn" onclick="auth.loginWithGitHub()">GitHub 登录</button>
+        <div class="auth-user" id="userInfo" style="display: none;">
+          <img id="userAvatar" src="" alt="">
+          <span id="userName"></span>
+          <span class="role-badge" id="roleBadge"></span>
+          <button class="auth-btn" id="toggleModeBtn" onclick="auth.toggleViewMode()" style="display: none;">切换到访客模式</button>
+          <button class="auth-btn" onclick="auth.logout()">登出</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro-section">
+      <h1>关于潜意识</h1>
+
+      <div class="table-of-contents">
+        <h2>目录</h2>
+        <ul>
+          <li class="toc-h2"><a href="#problem-description">问题描述</a></li>
+          <li class="toc-h2"><a href="#phenomenon-analysis">现象分析</a>
+            <ul>
+              <li class="toc-h3"><a href="#what-is-this">一、这到底是一种什么现象？</a></li>
+              <li class="toc-h3"><a href="#scientific-explanation">二、科学解释：你的大脑在"抢跑"，但意识没跟上</a>
+                <ul>
+                  <li class="toc-h4"><a href="#system1">1️⃣ 潜意识（System 1）先于意识做出判断</a></li>
+                  <li class="toc-h4"><a href="#working-memory">2️⃣ 工作记忆带宽不足（瞬间想法被挤掉）</a></li>
+                  <li class="toc-h4"><a href="#self-inhibition">3️⃣ 自我抑制机制过强（尤其常见于工作场景）</a></li>
+                </ul>
+              </li>
+              <li class="toc-h3"><a href="#why-afterwards">三、为什么你"事后反而能想到"？</a></li>
+            </ul>
+          </li>
+          <li class="toc-h2"><a href="#solutions">解决方案</a>
+            <ul>
+              <li class="toc-h3"><a href="#stage1">一、第一阶段（第 1–2 周）</a></li>
+              <li class="toc-h3"><a href="#stage2">二、第二阶段（第 3–4 周）</a></li>
+              <li class="toc-h3"><a href="#stage3">三、第三阶段（第 5–6 周）</a></li>
+              <li class="toc-h3"><a href="#stage4">四、第四阶段（第 7–8 周）</a></li>
+              <li class="toc-h3"><a href="#core-action">五、贯穿全程的一个核心动作（非常重要）</a></li>
+              <li class="toc-h3"><a href="#priority">六、如果你只能做一半，优先顺序是这个</a></li>
+              <li class="toc-h3"><a href="#final-words">最后我想对你说一句实话</a></li>
+            </ul>
+          </li>
+          <li class="toc-h2"><a href="#plans">我的后续计划</a></li>
+        </ul>
+      </div>
+      <h2 id="problem-description">问题描述</h2>
+      <p>我时常会遇到这样的场景：生活中，当我做某各抉择的时候，内心隐约会有个声音，这个抉择可能是有问题的。但可能是因为别人已经七嘴八舌的说了很多，让我觉得拒绝别人很不好意思。最终导致使得自己受到非常严重的损失。</p>
+
+      <p>再比如，在工作中，和别人讨论一件事情的时候，有些点，我内心会一闪而过，但有时候是因为这个方法之后忘掉，有时候是因为自己觉得没那么重要，我没先提到那个点，之后反而让对方提出，这样显得我非常被动。</p>
+
+      <p>如此种种吧。</p>
+
+      <p>这样，本来自己是能够完全避免的损失和尴尬，因为自己没把握住潜意识里的意思自我提醒、暗示，最终蒙受损失或者遭遇尴尬。</p>
+
+      <p>我想对这个现象，做个探索；也想对这个问题，想下解决方案。</p>
+
+      <h2 id="phenomenon-analysis">现象分析</h2>
+
+      <p>这个分析，是GPT给出的，我就直接复制过来了。</p>
+
+      <hr>
+
+      <h3 id="what-is-this">一、这到底是一种什么现象？</h3>
+
+      <p>你描述的核心特征有三点：</p>
+
+      <ul>
+        <li>"我隐约知道不对/有更好的说法，但一闪而过"</li>
+        <li>意识层还没来得及加工，决定或表达已经发生</li>
+        <li>事后回看，发现当时其实"已经想到过"</li>
+      </ul>
+
+      <p>这不是想象，也不是健忘，而是几种机制叠加的结果。</p>
+
+      <hr>
+
+      <h3 id="scientific-explanation">二、科学解释：你的大脑在"抢跑"，但意识没跟上</h3>
+
+      <h4 id="system1">1️⃣ 潜意识（System 1）先于意识做出判断</h4>
+
+      <p>心理学家卡尼曼提出"双系统理论"：</p>
+
+      <ul>
+        <li><strong>系统1（潜意识）</strong><br>快速、直觉、情境化、模式识别<br>👉 你说的"隐约觉得不对""更好的表达方式"，就在这里</li>
+        <li><strong>系统2（意识）</strong><br>慢、理性、语言化、需要能量<br>👉 你来不及把它"翻译成语言或行动"</li>
+      </ul>
+
+      <p><strong>📌 关键点：</strong>不是你没想到，而是没来得及"上浮"到意识层</p>
+
+      <hr>
+
+      <h4 id="working-memory">2️⃣ 工作记忆带宽不足（瞬间想法被挤掉）</h4>
+
+      <p>你的大脑同时在做几件事：</p>
+
+      <ul>
+        <li>维持社交压力（别说错话）</li>
+        <li>评估风险（这样说麻不麻烦）</li>
+        <li>处理外部信息（对方在说什么）</li>
+      </ul>
+
+      <p>而灵感、直觉、微妙判断本身是极易挥发的，如果没有被迅速"抓住"，就会被挤掉。</p>
+
+      <p>就像你在梦里想到一个极好的点子，但醒来 5 秒后就消失。</p>
+
+      <hr>
+
+      <h4 id="self-inhibition">3️⃣ 自我抑制机制过强（尤其常见于工作场景）</h4>
+
+      <p>你提到一个非常重要的点：</p>
+
+      <p>"可能是因为怕麻烦"</p>
+
+      <p>这意味着你在潜意识刚冒头的时候，就被一个更高优先级的系统压制了：</p>
+
+      <ul>
+        <li>怕麻烦</li>
+        <li>怕多此一举</li>
+        <li>怕显得啰嗦</li>
+        <li>怕判断错</li>
+      </ul>
+
+      <p><strong>📌 久而久之，大脑会学会：</strong><br>"别急着把这些想法送上来，反正也不会被用"</p>
+
+      <p>于是它出现得更快、消失得更快。</p>
+
+      <hr>
+
+      <h3 id="why-afterwards">三、为什么你"事后反而能想到"？</h3>
+
+      <p>因为事后：</p>
+
+      <ul>
+        <li>没有时间压力</li>
+        <li>没有社交风险</li>
+        <li>没有能量消耗</li>
+      </ul>
+
+      <p>系统2终于有空间，把系统1的东西整理出来</p>
+
+      <p>所以你会有强烈的懊恼感：</p>
+
+      <p>"我当时其实是想到的啊！"</p>
+
+      <p>这不是后见之明，而是延迟访问。</p>
+
+      <hr>
+
+      <h2 id="solutions">解决方案</h2>
+      <p>这个解决方案，是GPT给出的(ai太强大了)</p>
+
+      <hr>
+
+      <h3 id="stage1">一、第一阶段（第 1–2 周）</h3>
+
+      <p><strong>建立正确认知：你不是慢半拍，而是被打断了</strong></p>
+
+      <p><strong>📘 书籍 1：《思考，快与慢》</strong></p>
+
+      <p>目标：确认"那一闪而过的感觉"是有来源、有价值的</p>
+
+      <p>阅读重点（不用全读）</p>
+
+      <ul>
+        <li>系统1 vs 系统2</li>
+        <li>直觉判断的可靠性与边界</li>
+        <li>决策偏差的成因</li>
+      </ul>
+
+      <hr>
+
+      <p><strong>🧪 实操 1：3 秒潜意识捕捉训练（每天）</strong></p>
+
+      <p>适用场景：</p>
+
+      <ul>
+        <li>回消息前</li>
+        <li>做选择前</li>
+        <li>接别人建议时</li>
+      </ul>
+
+      <p>步骤：</p>
+
+      <ol>
+        <li>准备行动前，强制停 3 秒</li>
+        <li>问自己一句（固定）：<br>"我刚刚是不是有一个不太舒服 / 不太对的感觉？"</li>
+        <li>不分析，只等</li>
+      </ol>
+
+      <p><strong>📌 目标不是马上做对，而是：</strong><br>👉 让潜意识知道：我会听你说话</p>
+
+      <hr>
+
+      <h3 id="stage2">二、第二阶段（第 3–4 周）</h3>
+
+      <p><strong>拆掉你最容易被击穿的地方：社会压力</strong></p>
+
+      <p><strong>📘 书籍 2：《影响力》</strong></p>
+
+      <p>目标：识别"我为什么会明知不对还继续"的机制</p>
+
+      <p>阅读重点</p>
+
+      <ul>
+        <li>承诺与一致性</li>
+        <li>互惠原则</li>
+        <li>社会认同</li>
+      </ul>
+
+      <p>你会发现：<br>👉 你买房的例子，几乎是教科书级案例</p>
+
+      <hr>
+
+      <p><strong>🧪 实操 2：社会压力翻译练习（遇到就做）</strong></p>
+
+      <p>当你脑中出现类似念头：</p>
+
+      <ul>
+        <li>"别人都付出这么多了"</li>
+        <li>"现在反悔是不是不好"</li>
+        <li>"会不会显得我很麻烦"</li>
+      </ul>
+
+      <p>立刻写下（或心里过一遍）：</p>
+
+      <p>"我现在真正担心的是：______"</p>
+
+      <p>然后再补一句：</p>
+
+      <p>"这件事的长期代价由谁承担？"</p>
+
+      <p><strong>📌 这个练习的效果是：</strong><br>👉 把"情绪压力"翻译成"责任归属"</p>
+
+      <hr>
+
+      <h3 id="stage3">三、第三阶段（第 5–6 周）</h3>
+
+      <p><strong>学会什么时候该信直觉，什么时候该停</strong></p>
+
+      <p><strong>📘 书籍 3：《直觉》（Gerd Gigerenzer）</strong></p>
+
+      <p>目标：让你不再纠结"我是不是在胡思乱想"</p>
+
+      <p>阅读重点</p>
+
+      <ul>
+        <li>直觉来自哪里</li>
+        <li>简单规则比复杂分析更可靠的场景</li>
+        <li>什么时候必须暂停</li>
+      </ul>
+
+      <hr>
+
+      <p><strong>🧪 实操 3：直觉合法化清单（提前准备）</strong></p>
+
+      <p>提前写下一张清单（非常重要）：</p>
+
+      <p>只要出现以下任意一条，我就必须暂停决策</p>
+
+      <p>例如：</p>
+
+      <ul>
+        <li>身体明显不舒服（胸口、胃、紧绷）</li>
+        <li>反复想"算了吧，别麻烦了"</li>
+        <li>需要用"别人都这么说"来安慰自己</li>
+        <li>觉得"好像哪里不对，但说不上来"</li>
+      </ul>
+
+      <p><strong>📌 你是在给直觉法定否决权。</strong></p>
+
+      <hr>
+
+      <h3 id="stage4">四、第四阶段（第 7–8 周）</h3>
+
+      <p><strong>修复根层模式：你不需要为所有人的情绪买单</strong></p>
+
+      <p><strong>📘 书籍 4：《被讨厌的勇气》</strong></p>
+
+      <p>目标：把"对别人负责"与"对自己负责"分开</p>
+
+      <p>阅读重点</p>
+
+      <ul>
+        <li>课题分离</li>
+        <li>他人期待不是你的义务</li>
+        <li>冲突不是失败</li>
+      </ul>
+
+      <p>⚠️ 这本书可能会让你不舒服，这是正常的。</p>
+
+      <hr>
+
+      <p><strong>🧪 实操 4：边界语言预演（每周 1 次）</strong></p>
+
+      <p>提前写下 3 句你可以用的"退出 / 拒绝 / 暂停"表达：</p>
+
+      <ul>
+        <li>"这个选择不适合我当前阶段"</li>
+        <li>"感谢你的建议，但我决定按自己的节奏来"</li>
+        <li>"我需要为这个决定负责，所以会再等等"</li>
+      </ul>
+
+      <p><strong>📌 关键不是说得多好，而是：</strong><br>👉 让大脑知道：拒绝是有安全出口的</p>
+
+      <hr>
+
+      <h3 id="core-action">五、贯穿全程的一个核心动作（非常重要）</h3>
+
+      <p><strong>📓 潜意识日志（每天 3–5 分钟）</strong></p>
+
+      <p>不用完整句子，只写关键词：</p>
+
+      <ul>
+        <li>今天哪一刻我"其实已经知道了"？</li>
+        <li>我当时有没有压住它？为什么？</li>
+        <li>下次出现这个信号，我要做的第一动作是什么？</li>
+      </ul>
+
+      <p><strong>📌 这不是记录生活，是在训练觉察通道。</strong></p>
+
+      <hr>
+
+      <h3 id="priority">六、如果你只能做一半，优先顺序是这个</h3>
+
+      <ol>
+        <li>《思考，快与慢》 + 实操 1</li>
+        <li>《影响力》 + 实操 2</li>
+        <li>其他视精力而定</li>
+      </ol>
+
+      <p>就算只做到前两步，<br>你在重大决策上的失误率都会明显下降。</p>
+
+      <hr>
+
+      <h3 id="final-words">最后我想对你说一句实话</h3>
+
+      <p>你现在的问题，不是缺方法，而是终于走到了一个"要为自己负责"的阶段。</p>
+      <h2 id="plans">我的后续计划</h2>
+      <hr>
+      <p>我准备制定一个checklist，对自己每天的决策进行检查，看看自己是否遵循了这些原则。</p>
+
+      <div class="tracking-table-container">
+        <table class="tracking-table" id="trackingTable">
+          <thead>
+            <tr>
+              <th>日期</th>
+              <th>关键决策/沟通出现?</th>
+              <th>是否执行"3秒停顿"</th>
+              <th>是否捕捉到潜意识信号</th>
+              <th>是否尊重该信号</th>
+              <th>未执行原因(如有)</th>
+              <th>当天一句反思</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody id="trackingTableBody">
+            <!-- 行将通过JavaScript动态添加 -->
+          </tbody>
+        </table>
+        <div class="tracking-table-actions">
+          <button class="add-btn admin-only" onclick="addTrackingRow()">+ 添加记录</button>
+          <button class="preview-btn" onclick="previewTrackingData()">👁️ 预览</button>
+          <button class="save-btn admin-only" onclick="confirmAndSave()">💾 保存</button>
+          <button class="show-more-btn" id="showMoreBtn" onclick="showMoreRows()" style="display: none;">显示更多 (3条)</button>
+        </div>
+      </div>
+
+      <!-- 预览模态框 -->
+      <div class="preview-modal" id="previewModal">
+        <div class="preview-modal-content">
+          <div class="preview-modal-header">
+            <h3>预览数据</h3>
+            <button class="preview-modal-close" onclick="closePreview()">×</button>
+          </div>
+          <div id="previewContent">
+            <!-- 预览内容将在这里显示 -->
+          </div>
+          <div class="preview-modal-actions">
+            <button class="cancel-btn" onclick="closePreview()">取消</button>
+            <button class="confirm-btn" onclick="confirmSave()">确认保存</button>
+          </div>
+        </div>
+      </div>
+
+      <a href="../thinking/" class="back-link">← 返回思维漫步</a>
+    </section>
+
+    <!-- 评论区域 -->
+    <section class="comments-section">
+      <div class="giscus"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Cosmos of WW. 记录思考，分享成长。</p>
+  </footer>
+
+  <script src="../js/lang-switcher.js"></script>
+  <!-- 认证模块 -->
+  <script src="../js/auth.js"></script>
+  <!-- Giscus 评论系统 -->
+  <script src="https://giscus.app/client.js"
+          data-repo="cosmos-wonder/cosmos-wonder.github.io"
+          data-repo-id="R_kgDOQkSejw"
+          data-category="General"
+          data-category-id="DIC_kwDOQkSej84CzySo"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <script>
+    // 后端API地址 - 自动检测开发/生产环境
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8787'  // 本地开发环境
+      : 'https://blog-backend.cxmwwb.workers.dev';  // 生产环境
+    
+    // 追踪表格管理
+    const STORAGE_KEY = 'subconscious_tracking_data'; // 保留作为备份
+    let rowCounter = 0;
+    let visibleRowCount = 3; // 默认显示的行数
+
+    // 获取 API 请求头（包含认证 token）
+    function getAuthHeaders() {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (window.auth && window.auth.getAuthToken()) {
+        headers['Authorization'] = `Bearer ${window.auth.getAuthToken()}`;
+      }
+      
+      return headers;
+    }
+
+    // 更新 UI 权限控制
+    function updateUIForRole() {
+      const isAdmin = window.auth && window.auth.isAdmin();
+      const trackingTable = document.getElementById('trackingTable');
+      
+      if (trackingTable) {
+        if (isAdmin) {
+          trackingTable.classList.remove('read-only');
+        } else {
+          trackingTable.classList.add('read-only');
+        }
+      }
+
+      // 显示/隐藏 admin-only 按钮
+      document.querySelectorAll('.admin-only').forEach(el => {
+        el.style.display = isAdmin ? '' : 'none';
+      });
+    }
+
+    // 更新认证 UI
+    function updateAuthUI() {
+      const user = window.auth ? window.auth.getCurrentUser() : null;
+      const role = window.auth ? window.auth.getViewMode() : 'guest';
+      const isAdmin = window.auth ? window.auth.isAdmin() : false;
+
+      const loginBtn = document.getElementById('loginBtn');
+      const userInfo = document.getElementById('userInfo');
+      const userName = document.getElementById('userName');
+      const userAvatar = document.getElementById('userAvatar');
+      const roleBadge = document.getElementById('roleBadge');
+      const toggleModeBtn = document.getElementById('toggleModeBtn');
+
+      if (user) {
+        loginBtn.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userName.textContent = user.name || user.login;
+        userAvatar.src = user.avatar_url;
+        userAvatar.alt = user.login;
+        roleBadge.textContent = role === 'admin' ? '管理员' : '访客';
+        roleBadge.className = `role-badge ${role}`;
+        
+        // 只有 admin 可以切换模式
+        if (window.auth.getCurrentRole() === 'admin') {
+          toggleModeBtn.style.display = 'inline-block';
+          toggleModeBtn.textContent = role === 'admin' ? '切换到访客模式' : '切换到管理员模式';
+        } else {
+          toggleModeBtn.style.display = 'none';
+        }
+      } else {
+        loginBtn.style.display = 'inline-block';
+        userInfo.style.display = 'none';
+      }
+
+      // 更新 UI 权限控制
+      updateUIForRole();
+    }
+
+    // 监听认证状态变化
+    document.addEventListener('authStateChanged', () => {
+      updateAuthUI();
+      // 重新加载数据
+      if (typeof loadTrackingData === 'function') {
+        loadTrackingData();
+      }
+    });
+
+    // 生成唯一ID
+    function generateRowId() {
+      return 'row_' + Date.now() + '_' + (++rowCounter);
+    }
+
+    // 创建一行
+    function createTrackingRow(data = {}) {
+      // 使用数据库 ID 或生成临时 ID
+      const rowId = data.db_id || data.id || generateRowId();
+      const today = new Date().toISOString().split('T')[0];
+      
+      // 转换数据库格式到前端格式
+      const dateValue = data.record_date || data.date || today;
+      const decisionValue = data.has_decision !== undefined ? (data.has_decision ? 'yes' : 'no') : (data.decision || '');
+      const pauseValue = data.did_pause !== undefined ? (data.did_pause ? 'yes' : 'no') : (data.pause || '');
+      const signalValue = data.captured_signal !== undefined ? (data.captured_signal ? 'yes' : 'no') : (data.signal || '');
+      const respectValue = data.respected_signal !== undefined ? (data.respected_signal ? 'yes' : 'no') : (data.respect || '');
+      
+      const row = document.createElement('tr');
+      row.id = rowId;
+      row.setAttribute('data-db-id', data.db_id || '');
+      row.setAttribute('data-date', dateValue); // 用于排序
+      row.innerHTML = `
+        <td>
+          <input type="date" class="date-input" value="${dateValue}" onchange="handleDateChange(this, '${rowId}')">
+        </td>
+        <td>
+          <div class="yes-no-group">
+            <label><input type="radio" name="decision_${rowId}" value="yes" ${decisionValue === 'yes' ? 'checked' : ''} onchange="markAsChanged()"> 是</label>
+            <label><input type="radio" name="decision_${rowId}" value="no" ${decisionValue === 'no' ? 'checked' : ''} onchange="markAsChanged()"> 否</label>
+          </div>
+        </td>
+        <td>
+          <div class="yes-no-group">
+            <label><input type="radio" name="pause_${rowId}" value="yes" ${pauseValue === 'yes' ? 'checked' : ''} onchange="markAsChanged()"> ✅</label>
+            <label><input type="radio" name="pause_${rowId}" value="no" ${pauseValue === 'no' ? 'checked' : ''} onchange="markAsChanged()"> ❌</label>
+          </div>
+        </td>
+        <td>
+          <div class="yes-no-group">
+            <label><input type="radio" name="signal_${rowId}" value="yes" ${signalValue === 'yes' ? 'checked' : ''} onchange="markAsChanged()"> ✅</label>
+            <label><input type="radio" name="signal_${rowId}" value="no" ${signalValue === 'no' ? 'checked' : ''} onchange="markAsChanged()"> ❌</label>
+          </div>
+        </td>
+        <td>
+          <div class="yes-no-group">
+            <label><input type="radio" name="respect_${rowId}" value="yes" ${respectValue === 'yes' ? 'checked' : ''} onchange="markAsChanged()"> ✅</label>
+            <label><input type="radio" name="respect_${rowId}" value="no" ${respectValue === 'no' ? 'checked' : ''} onchange="markAsChanged()"> ❌</label>
+          </div>
+        </td>
+        <td>
+          <input type="text" class="reason-input" placeholder="例:当时其实犹豫了" value="${data.reason || ''}" onchange="markAsChanged()">
+        </td>
+        <td>
+          <textarea class="reflection-input" placeholder="写下今天的反思..." onchange="markAsChanged()">${data.reflection || ''}</textarea>
+        </td>
+        <td>
+          <button class="delete-btn admin-only" onclick="deleteTrackingRow('${rowId}')">删除</button>
+        </td>
+      `;
+      return row;
+    }
+
+    // 标记数据已修改
+    let hasUnsavedChanges = false;
+
+    function markAsChanged() {
+      hasUnsavedChanges = true;
+    }
+
+    // 按日期排序行（降序，最新的在前）
+    function sortRowsByDate() {
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = Array.from(tbody.querySelectorAll('tr'));
+      
+      rows.sort((a, b) => {
+        const dateA = a.querySelector('.date-input').value || '';
+        const dateB = b.querySelector('.date-input').value || '';
+        return dateB.localeCompare(dateA); // 降序排序：最新的在前
+      });
+      
+      // 清空 tbody 并重新添加排序后的行
+      tbody.innerHTML = '';
+      rows.forEach(row => {
+        tbody.appendChild(row);
+        row.setAttribute('data-date', row.querySelector('.date-input').value);
+      });
+      
+      // 更新可见行数
+      updateVisibleRows();
+    }
+
+    // 处理日期变更
+    function handleDateChange(input, rowId) {
+      const row = document.getElementById(rowId);
+      if (row) {
+        row.setAttribute('data-date', input.value);
+        // 重新排序
+        sortRowsByDate();
+      }
+      markAsChanged();
+    }
+
+    // 添加一行（默认今天日期，插入到最前面，因为今天应该是最新的）
+    function addTrackingRow() {
+      // 检查权限
+      if (!window.auth || !window.auth.isAdmin()) {
+        alert('只有管理员可以添加记录');
+        return;
+      }
+      const tbody = document.getElementById('trackingTableBody');
+      const today = new Date().toISOString().split('T')[0];
+      const row = createTrackingRow({ date: today });
+      
+      // 直接插入到最前面（因为今天应该是最新的日期）
+      const firstRow = tbody.querySelector('tr');
+      if (firstRow) {
+        tbody.insertBefore(row, firstRow);
+      } else {
+        tbody.appendChild(row);
+      }
+      
+      row.setAttribute('data-date', today);
+      markAsChanged();
+      
+      // 重新排序以确保正确位置（如果日期不是今天，会排到正确位置）
+      sortRowsByDate();
+    }
+
+    // 更新可见行数
+    function updateVisibleRows() {
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = tbody.querySelectorAll('tr');
+      const showMoreBtn = document.getElementById('showMoreBtn');
+      
+      // 移除所有 hidden-row 类
+      rows.forEach(row => row.classList.remove('hidden-row'));
+      
+      // 如果行数超过默认显示数量，隐藏多余的行
+      if (rows.length > visibleRowCount) {
+        for (let i = visibleRowCount; i < rows.length; i++) {
+          rows[i].classList.add('hidden-row');
+        }
+        showMoreBtn.style.display = 'inline-block';
+        const remaining = rows.length - visibleRowCount;
+        showMoreBtn.textContent = `显示更多 (${Math.min(remaining, 3)}条)`;
+      } else {
+        showMoreBtn.style.display = 'none';
+      }
+    }
+
+    // 显示更多行
+    function showMoreRows() {
+      visibleRowCount += 3;
+      updateVisibleRows();
+    }
+    
+    // 删除一行
+    async function deleteTrackingRow(rowId) {
+      if (confirm('确定要删除这条记录吗？')) {
+        const row = document.getElementById(rowId);
+        if (!row) return;
+        
+        const dbId = row.getAttribute('data-db-id');
+        
+        // 如果存在数据库 ID，从API删除
+        if (dbId) {
+          try {
+            // 检查权限
+        if (!window.auth || !window.auth.isAdmin()) {
+          alert('只有管理员可以删除数据');
+          return;
+        }
+
+        const response = await fetch(`${API_BASE_URL}/api/subconscious-tracking?id=${encodeURIComponent(dbId)}`, {
+          method: 'DELETE',
+          headers: getAuthHeaders(),
+        });
+            
+            if (!response.ok) {
+              const error = await response.text();
+              console.error('删除API记录失败:', error);
+              alert('删除失败: ' + error);
+              return;
+            }
+          } catch (e) {
+            console.error('删除操作异常:', e);
+          }
+        }
+        
+        // 从界面删除
+        row.remove();
+        
+        // 更新可见行数
+        updateVisibleRows();
+        
+        // 保存到 localStorage 作为备份
+        saveToLocalStorage();
+      }
+    }
+
+    // 将前端数据格式转换为数据库格式
+    function convertToDbFormat(rowData) {
+      return {
+        record_date: rowData.date,
+        has_decision: rowData.decision === 'yes' ? true : (rowData.decision === 'no' ? false : null),
+        did_pause: rowData.pause === 'yes' ? true : (rowData.pause === 'no' ? false : null),
+        captured_signal: rowData.signal === 'yes' ? true : (rowData.signal === 'no' ? false : null),
+        respected_signal: rowData.respect === 'yes' ? true : (rowData.respect === 'no' ? false : null),
+        reason: rowData.reason || null,
+        reflection: rowData.reflection || null
+      };
+    }
+
+    // 预览数据
+    function previewTrackingData() {
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = tbody.querySelectorAll('tr');
+      const data = [];
+      
+      rows.forEach(row => {
+        const rowData = {
+          date: row.querySelector('.date-input').value,
+          decision: row.querySelector(`input[name^="decision_"]:checked`)?.value || '未选择',
+          pause: row.querySelector(`input[name^="pause_"]:checked`)?.value || '未选择',
+          signal: row.querySelector(`input[name^="signal_"]:checked`)?.value || '未选择',
+          respect: row.querySelector(`input[name^="respect_"]:checked`)?.value || '未选择',
+          reason: row.querySelector('.reason-input').value || '无',
+          reflection: row.querySelector('.reflection-input').value || '无'
+        };
+        
+        if (rowData.date) {
+          data.push(rowData);
+        }
+      });
+      
+      if (data.length === 0) {
+        alert('没有可预览的数据，请先添加记录。');
+        return;
+      }
+      
+      // 显示预览
+      const previewContent = document.getElementById('previewContent');
+      let html = '<table class="preview-table"><thead><tr>';
+      html += '<th>日期</th><th>关键决策/沟通出现?</th><th>是否执行"3秒停顿"</th>';
+      html += '<th>是否捕捉到潜意识信号</th><th>是否尊重该信号</th><th>未执行原因</th><th>当天一句反思</th>';
+      html += '</tr></thead><tbody>';
+      
+      data.forEach(row => {
+        html += '<tr>';
+        html += `<td>${row.date}</td>`;
+        html += `<td>${row.decision === 'yes' ? '是' : row.decision === 'no' ? '否' : '未选择'}</td>`;
+        html += `<td>${row.pause === 'yes' ? '✅' : row.pause === 'no' ? '❌' : '未选择'}</td>`;
+        html += `<td>${row.signal === 'yes' ? '✅' : row.signal === 'no' ? '❌' : '未选择'}</td>`;
+        html += `<td>${row.respect === 'yes' ? '✅' : row.respect === 'no' ? '❌' : '未选择'}</td>`;
+        html += `<td>${row.reason}</td>`;
+        html += `<td>${row.reflection}</td>`;
+        html += '</tr>';
+      });
+      
+      html += '</tbody></table>';
+      previewContent.innerHTML = html;
+      
+      // 显示模态框
+      document.getElementById('previewModal').classList.add('active');
+    }
+
+    // 关闭预览
+    function closePreview() {
+      document.getElementById('previewModal').classList.remove('active');
+    }
+
+    // 点击模态框外部关闭
+    document.addEventListener('click', function(e) {
+      const modal = document.getElementById('previewModal');
+      if (e.target === modal) {
+        closePreview();
+      }
+    });
+
+    // 确认并保存
+    function confirmAndSave() {
+      // 检查权限
+      if (!window.auth || !window.auth.isAdmin()) {
+        alert('只有管理员可以保存数据');
+        return;
+      }
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = tbody.querySelectorAll('tr');
+      
+      if (rows.length === 0) {
+        alert('没有可保存的数据。');
+        return;
+      }
+      
+      // 检查是否有未填写日期的记录
+      let hasInvalidData = false;
+      rows.forEach(row => {
+        if (!row.querySelector('.date-input').value) {
+          hasInvalidData = true;
+        }
+      });
+      
+      if (hasInvalidData) {
+        if (!confirm('存在未填写日期的记录，将跳过这些记录。是否继续保存？')) {
+          return;
+        }
+      }
+      
+      if (confirm('确定要保存所有数据到数据库吗？')) {
+        saveTrackingData().then(() => {
+          alert('数据保存成功！');
+          hasUnsavedChanges = false;
+        }).catch(error => {
+          alert('保存失败：' + error.message);
+        });
+      }
+    }
+
+    // 从预览模态框确认保存
+    function confirmSave() {
+      closePreview();
+      confirmAndSave();
+    }
+
+    // 保存数据到后端API和localStorage
+    async function saveTrackingData() {
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = tbody.querySelectorAll('tr');
+      
+      // 先保存到 localStorage 作为备份
+      saveToLocalStorage();
+      
+      try {
+        for (const row of rows) {
+          const dbId = row.getAttribute('data-db-id');
+          const rowData = {
+            id: row.id,
+            db_id: dbId,
+            date: row.querySelector('.date-input').value,
+            decision: row.querySelector(`input[name^="decision_"]:checked`)?.value || '',
+            pause: row.querySelector(`input[name^="pause_"]:checked`)?.value || '',
+            signal: row.querySelector(`input[name^="signal_"]:checked`)?.value || '',
+            respect: row.querySelector(`input[name^="respect_"]:checked`)?.value || '',
+            reason: row.querySelector('.reason-input').value,
+            reflection: row.querySelector('.reflection-input').value
+          };
+          
+          if (!rowData.date) {
+            console.warn('跳过没有日期的记录');
+            continue;
+          }
+          
+          const dbData = convertToDbFormat(rowData);
+          
+          // 检查权限
+          if (!window.auth || !window.auth.isAdmin()) {
+            alert('只有管理员可以保存数据');
+            return;
+          }
+
+          // 调用后端API保存数据
+          const response = await fetch(`${API_BASE_URL}/api/subconscious-tracking`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(dbData),
+          });
+          
+          if (!response.ok) {
+            const error = await response.text();
+            console.error('保存记录失败:', error);
+            throw new Error(error);
+          }
+          
+          const data = await response.json();
+          if (data && data.id) {
+            // 更新行的 data-db-id 属性
+            row.setAttribute('data-db-id', data.id);
+            row.id = 'row_' + data.id;
+          }
+        }
+      } catch (e) {
+        console.error('保存到API失败:', e);
+        throw e;
+      }
+    }
+
+    // 保存到 localStorage（作为备份）
+    function saveToLocalStorage() {
+      const tbody = document.getElementById('trackingTableBody');
+      const rows = tbody.querySelectorAll('tr');
+      const data = [];
+
+      rows.forEach(row => {
+        const rowData = {
+          id: row.id,
+          db_id: row.getAttribute('data-db-id'),
+          date: row.querySelector('.date-input').value,
+          decision: row.querySelector(`input[name^="decision_"]:checked`)?.value || '',
+          pause: row.querySelector(`input[name^="pause_"]:checked`)?.value || '',
+          signal: row.querySelector(`input[name^="signal_"]:checked`)?.value || '',
+          respect: row.querySelector(`input[name^="respect_"]:checked`)?.value || '',
+          reason: row.querySelector('.reason-input').value,
+          reflection: row.querySelector('.reflection-input').value
+        };
+        data.push(rowData);
+      });
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      } catch (e) {
+        console.error('保存到 localStorage 失败:', e);
+      }
+    }
+
+    // 从后端API加载数据
+    async function loadTrackingData() {
+      let data = [];
+      
+      // 尝试从API加载
+      try {
+        const response = await fetch(`${API_BASE_URL}/api/subconscious-tracking`, {
+          headers: getAuthHeaders(),
+        });
+        
+        if (response.ok) {
+          const dbData = await response.json();
+          
+          if (dbData && dbData.length > 0) {
+            // 转换数据库格式到前端格式
+            data = dbData.map(item => ({
+              db_id: item.id,
+              id: 'row_' + item.id,
+              date: item.record_date,
+              decision: item.has_decision === true ? 'yes' : (item.has_decision === false ? 'no' : ''),
+              pause: item.did_pause === true ? 'yes' : (item.did_pause === false ? 'no' : ''),
+              signal: item.captured_signal === true ? 'yes' : (item.captured_signal === false ? 'no' : ''),
+              respect: item.respected_signal === true ? 'yes' : (item.respected_signal === false ? 'no' : ''),
+              reason: item.reason || '',
+              reflection: item.reflection || ''
+            }));
+          } else {
+            // API返回空数据，尝试从 localStorage 加载
+            data = loadFromLocalStorage();
+          }
+        } else {
+          console.error('从API加载失败:', response.status);
+          // 如果API加载失败，尝试从 localStorage 加载
+          data = loadFromLocalStorage();
+        }
+      } catch (e) {
+        console.error('加载数据异常:', e);
+        // 如果加载异常，从 localStorage 加载
+        data = loadFromLocalStorage();
+      }
+      
+      // 按日期排序数据（降序，最新的在前）
+      data.sort((a, b) => {
+        const dateA = a.record_date || a.date || '';
+        const dateB = b.record_date || b.date || '';
+        return dateB.localeCompare(dateA); // 降序排序：最新的在前
+      });
+      
+      // 渲染数据
+      const tbody = document.getElementById('trackingTableBody');
+      tbody.innerHTML = '';
+      
+      if (data.length > 0) {
+        data.forEach(rowData => {
+          const row = createTrackingRow(rowData);
+          tbody.appendChild(row);
+        });
+      } else {
+        // 如果没有数据，添加一行示例（默认今天）
+        addTrackingRow();
+      }
+      
+      // 更新可见行数
+      updateVisibleRows();
+    }
+
+    // 从 localStorage 加载数据（备用）
+    function loadFromLocalStorage() {
+      try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        if (saved) {
+          return JSON.parse(saved);
+        }
+      } catch (e) {
+        console.error('从 localStorage 加载失败:', e);
+      }
+      return [];
+    }
+
+
+    // 页面加载时初始化
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 等待认证模块初始化
+      await new Promise(resolve => {
+        if (window.auth) {
+          resolve();
+        } else {
+          const checkAuth = setInterval(() => {
+            if (window.auth) {
+              clearInterval(checkAuth);
+              resolve();
+            }
+          }, 100);
+        }
+      });
+
+      updateAuthUI();
+      loadTrackingData();
+    });
+  </script>
+</body>
+</html>
+

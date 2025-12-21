@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>期权学习 - Cosmos of WW</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Georgia', serif;
+      line-height: 1.6;
+      color: #000;
+      background: #FAFAFA;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../assets/images/logo.svg');
+      background-repeat: no-repeat;
+      background-position: right bottom;
+      background-size: 400px;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .logo-text-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .logo-text {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #000;
+      font-family: 'Georgia', serif;
+      line-height: 1.2;
+    }
+
+    .logo-subtitle {
+      font-size: 0.9em;
+      font-weight: 400;
+      color: #666;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      line-height: 1.2;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    nav a {
+      color: #000;
+      text-decoration: none;
+      font-size: 0.95em;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+
+    nav a:hover {
+      opacity: 0.7;
+    }
+
+    nav a.active {
+      opacity: 0.5;
+    }
+
+    #lang-switcher {
+      padding: 6px 30px 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+    }
+
+    #lang-switcher:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    #lang-switcher:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .intro-section h1 {
+      font-size: 3.5em;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 50px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section p {
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.9;
+      margin-bottom: 25px;
+    }
+
+    .intro-section h2 {
+      font-size: 2em;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      color: #000;
+      font-family: 'Georgia', serif;
+    }
+
+    .intro-section h2:first-of-type {
+      margin-top: 30px;
+    }
+
+    .chart-container {
+      margin: 40px 0;
+      padding: 20px;
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+    }
+
+    .chart-container svg {
+      width: 100%;
+      height: auto;
+      max-width: 600px;
+      display: block;
+      margin: 0 auto;
+    }
+
+    .chart-axis {
+      stroke: #333;
+      stroke-width: 1.5;
+    }
+
+    .chart-line {
+      fill: none;
+      stroke-width: 2.5;
+    }
+
+    .chart-line.call-price {
+      stroke: #4CAF50;
+    }
+
+    .chart-line.expiration-value {
+      stroke: #2196F3;
+    }
+
+    .chart-time-value {
+      stroke: #F44336;
+      stroke-width: 1.5;
+      opacity: 0.6;
+    }
+
+    .chart-label {
+      font-size: 14px;
+      fill: #333;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+
+    .chart-title {
+      font-size: 16px;
+      font-weight: 600;
+      fill: #000;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 50px;
+      color: #000;
+      text-decoration: underline;
+      font-size: 1em;
+      font-weight: 400;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    /* 评论区域样式 */
+    .comments-section {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding: 0 20px;
+    }
+
+    .comments-section .giscus {
+      margin-top: 40px;
+    }
+
+    .comments-section .giscus-frame {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Footer */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+    }
+
+    footer p {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      main {
+        padding: 60px 20px;
+      }
+
+      .intro-section h1 {
+        font-size: 2.5em;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <div class="logo-text-container">
+          <div class="logo-text">Cosmos of WW</div>
+          <div class="logo-subtitle">Along with Probability</div>
+        </div>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="../index.html">首页</a></li>
+          <li><a href="../about/">关于我</a></li>
+          <li><a href="../investment/">投资记录</a></li>
+          <li><a href="../thinking/">思维漫步</a></li>
+          <li>
+            <select id="lang-switcher">
+              <option value="traditional">繁體中文</option>
+              <option value="simplified">简体中文</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro-section">
+      <h1>期权学习</h1>
+
+      <h2>期权价值</h2>
+       <ul>
+        <li>内在价值</li>
+        <li>时间价值</li>
+       </ul>
+       <h2> 到期收益曲线图</h2>
+       <p>
+        收益曲线，在某个时间点，不同股价对应的盈亏情况
+        <br>
+        这个时候，时间价值将为0，仅剩内在价值。
+        期权是零和游戏，买卖双方不可能双赢或者双输。
+       </p>
+       <h2>期权价格曲线</h2>
+       <ul>
+        <li>call option</li>
+        到期收益曲线，和横坐标的距离，就是内在价值。（期权到期，只有内在，没有时间）
+        <!-- 到期收益曲线图 -->
+        <div class="chart-container">
+          <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.3em; font-weight: 500;">到期收益曲线图</h3>
+          <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- 坐标轴 -->
+            <line x1="50" y1="350" x2="550" y2="350" class="chart-axis" />
+            <line x1="50" y1="350" x2="50" y2="50" class="chart-axis" />
+            
+            <!-- 坐标轴标签 -->
+            <text x="300" y="390" text-anchor="middle" class="chart-label">股价</text>
+            <text x="20" y="200" text-anchor="middle" class="chart-label" transform="rotate(-90 20 200)">收益</text>
+            
+            <!-- 原点标记 -->
+            <circle cx="50" cy="350" r="3" fill="#000" />
+            
+            <!-- 零收益线（横坐标） -->
+            <line x1="50" y1="350" x2="550" y2="350" stroke="#999" stroke-width="1" stroke-dasharray="5,5" opacity="0.5" />
+            
+            <!-- Call 到期收益曲线（hockey stick形状，从执行价开始转折） -->
+            <path d="M 50 350 L 300 350 L 550 100" class="chart-line expiration-value" stroke-width="3" />
+            <text x="560" y="105" class="chart-label" fill="#2196F3">Call 到期收益</text>
+            
+            <!-- 执行价标记 -->
+            <line x1="300" y1="350" x2="300" y2="340" stroke="#666" stroke-width="2" />
+            <text x="300" y="365" text-anchor="middle" class="chart-label" fill="#666">执行价</text>
+            
+            <!-- 内在价值标注 -->
+            <line x1="400" y1="350" x2="400" y2="250" stroke="#F44336" stroke-width="2" stroke-dasharray="3,3" />
+            <text x="410" y="295" class="chart-label" fill="#F44336">内在价值</text>
+          </svg>
+        </div>
+
+         <p>
+           可以看的出来，股价越高，期权价格对股价约敏感，反之则不敏感。
+           <strong>所以，当做带方向期权的时候，敏感度越高越好；做波动率期权的时候，敏感度越低越好。当然，这里指的是做多。</strong>
+         </p>
+        <!-- 期权价格曲线图 -->
+        <div class="chart-container">
+          <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.3em; font-weight: 500;">期权价格曲线图</h3>
+          <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+            <!-- 坐标轴 -->
+            <line x1="50" y1="350" x2="550" y2="350" class="chart-axis" />
+            <line x1="50" y1="350" x2="50" y2="50" class="chart-axis" />
+            
+            <!-- 坐标轴标签 -->
+            <text x="300" y="390" text-anchor="middle" class="chart-label">股价</text>
+            <text x="20" y="200" text-anchor="middle" class="chart-label" transform="rotate(-90 20 200)">价格</text>
+            
+            <!-- 原点标记 -->
+            <circle cx="50" cy="350" r="3" fill="#000" />
+            
+            <!-- Call 到期价值线（蓝色，hockey stick形状） -->
+            <path d="M 50 350 L 300 350 L 550 100" class="chart-line expiration-value" />
+            <text x="560" y="105" class="chart-label" fill="#2196F3">Call 到期价值</text>
+            
+            <!-- Call 价格曲线（绿色，凸曲线） -->
+            <path d="M 50 350 Q 150 340 200 320 Q 250 300 300 280 Q 350 250 400 200 Q 450 150 500 120 Q 520 110 550 105" 
+                  class="chart-line call-price" />
+            <text x="560" y="100" class="chart-label" fill="#4CAF50">Call 价格</text>
+            
+            <!-- 时间价值线（红色垂直线，在内在价值区域） -->
+            <line x1="300" y1="350" x2="300" y2="280" class="chart-time-value" />
+            <line x1="350" y1="350" x2="350" y2="250" class="chart-time-value" />
+            <line x1="400" y1="350" x2="400" y2="200" class="chart-time-value" />
+            <line x1="450" y1="350" x2="450" y2="150" class="chart-time-value" />
+            <line x1="500" y1="350" x2="500" y2="120" class="chart-time-value" />
+            
+            <!-- 执行价标记 -->
+            <line x1="300" y1="350" x2="300" y2="340" stroke="#666" stroke-width="2" />
+            <text x="300" y="365" text-anchor="middle" class="chart-label" fill="#666">执行价</text>
+            
+            <!-- 到期标签 -->
+            <text x="480" y="40" class="chart-title" fill="#FF9800">到期</text>
+          </svg>
+        </div>
+       </ul>
+      <h2>希腊字母</h2>
+      <ul>
+        <li>Delta</li>
+        <li>Gamma</li>
+        <li>Theta</li>
+        <li>Vega</li>
+        <li>Rho</li>
+      </ul>
+      <h2>期权作用</h2>
+      <ul>
+        <li>对冲</li>
+        <p>即为自己已有持仓，进行对冲</p>
+        <li>杠杆（投机）</li>
+
+        <li>收取期权金</li>
+      </ul>
+
+
+      <a href="../investment/" class="back-link">← 返回投资记录</a>
+    </section>
+
+    <!-- 评论区域 -->
+    <section class="comments-section">
+      <div class="giscus"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Cosmos of WW. 记录思考，分享成长。</p>
+  </footer>
+
+  <script src="../js/lang-switcher.js"></script>
+  <!-- Giscus 评论系统 -->
+  <script src="https://giscus.app/client.js"
+          data-repo="cosmos-wonder/cosmos-wonder.github.io"
+          data-repo-id="R_kgDOQkSejw"
+          data-category="General"
+          data-category-id="DIC_kwDOQkSej84CzySo"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
+</body>
+</html>
+

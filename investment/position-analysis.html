@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>我的持仓分析 - Cosmos of WW</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Georgia', serif;
+      line-height: 1.6;
+      color: #000;
+      background: #FAFAFA;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: url('../assets/images/logo.svg');
+      background-repeat: no-repeat;
+      background-position: right bottom;
+      background-size: 400px;
+      opacity: 0.03;
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    /* Header */
+    header {
+      background: #FFFFFF;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 20px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .header-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    .logo-container a {
+      text-decoration: none;
+      color: inherit;
+      transition: opacity 0.2s;
+    }
+
+    .logo-container a:hover {
+      opacity: 0.7;
+    }
+
+    .logo-text-container {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .logo-text {
+      font-size: 1.8em;
+      font-weight: 700;
+      color: #000;
+      font-family: 'Georgia', serif;
+      line-height: 1.2;
+    }
+
+    .logo-subtitle {
+      font-size: 0.9em;
+      font-weight: 400;
+      color: #666;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+      line-height: 1.2;
+    }
+
+      nav ul {
+      list-style: none;
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    /* 认证 UI */
+    .auth-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .auth-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.9em;
+    }
+
+    .auth-user img {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+    }
+
+    .auth-btn {
+      padding: 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      background: transparent;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .auth-btn:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .role-badge {
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.75em;
+      font-weight: 500;
+    }
+
+    .role-badge.admin {
+      background: #28a745;
+      color: white;
+    }
+
+    .role-badge.guest {
+      background: #6c757d;
+      color: white;
+    }
+
+    /* 权限控制：隐藏元素 */
+    .admin-only {
+      display: none;
+    }
+
+    .admin-only.show {
+      display: block;
+    }
+
+    .admin-only.show-inline {
+      display: inline;
+    }
+
+    .admin-only.show-flex {
+      display: flex;
+    }
+
+    .admin-only.show-table {
+      display: table;
+    }
+
+    nav a {
+      color: #000;
+      text-decoration: none;
+      font-size: 0.95em;
+      font-weight: 400;
+      transition: opacity 0.2s;
+    }
+
+    nav a:hover {
+      opacity: 0.7;
+    }
+
+    nav a.active {
+      opacity: 0.5;
+    }
+
+    #lang-switcher {
+      padding: 6px 30px 6px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23000' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 8px center;
+      background-size: 12px;
+    }
+
+    #lang-switcher:hover {
+      background-color: rgba(0, 0, 0, 0.05);
+      border-color: rgba(0, 0, 0, 0.3);
+    }
+
+    #lang-switcher:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* Main Content */
+    main {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    /* 图表区域 */
+    .chart-section {
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 30px;
+      margin-bottom: 60px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .chart-title {
+      font-size: 1.2em;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .chart-type-selector {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .chart-type-btn {
+      padding: 8px 16px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      background: transparent;
+      color: #000;
+      font-size: 0.9em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+    }
+
+    .chart-type-btn.active {
+      background: #000;
+      color: #fff;
+      border-color: #000;
+    }
+
+    .chart-type-btn:hover:not(.active) {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    .chart-legend {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9em;
+    }
+
+    .legend-color {
+      width: 16px;
+      height: 3px;
+      border-radius: 2px;
+    }
+
+    .legend-color.dashed {
+      border-top: 2px dashed;
+      height: 0;
+    }
+
+    .chart-container {
+      position: relative;
+      height: 400px;
+      margin-bottom: 20px;
+    }
+
+    .time-range-selector {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .time-range-btn {
+      padding: 6px 12px;
+      border: none;
+      background: transparent;
+      color: #666;
+      font-size: 0.85em;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-family: inherit;
+      border-bottom: 2px solid transparent;
+    }
+
+    .time-range-btn.active {
+      color: #000;
+      border-bottom-color: #000;
+      font-weight: 500;
+    }
+
+    .time-range-btn:hover {
+      color: #000;
+    }
+
+    .intro-section h1 {
+      font-size: 3.5em;
+      font-weight: 400;
+      line-height: 1.2;
+      margin-bottom: 30px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .intro-section p {
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.9;
+      margin-bottom: 40px;
+    }
+
+    /* 表格容器 */
+    .table-section {
+      margin-bottom: 60px;
+    }
+
+    .table-section h2 {
+      font-size: 2em;
+      font-weight: 400;
+      margin-bottom: 20px;
+      font-family: 'Georgia', serif;
+      color: #000;
+    }
+
+    .table-container {
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    th {
+      padding: 15px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 0.95em;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    td {
+      padding: 15px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    }
+
+    tbody tr:hover {
+      background: rgba(0, 0, 0, 0.02);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    td.positive {
+      color: #28a745;
+      font-weight: 500;
+    }
+
+    td.negative {
+      color: #dc3545;
+      font-weight: 500;
+    }
+
+    /* 输入框样式 */
+    input[type="date"],
+    input[type="number"],
+    input[type="text"],
+    select {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      font-size: 0.95em;
+      font-family: inherit;
+      background: #FFFFFF;
+    }
+
+    input[type="date"]:focus,
+    input[type="number"]:focus,
+    input[type="text"]:focus,
+    select:focus {
+      outline: none;
+      border-color: rgba(0, 0, 0, 0.4);
+    }
+
+    /* 按钮样式 */
+    .btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      font-size: 0.95em;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      background: #000;
+      color: #fff;
+    }
+
+    .btn:hover {
+      opacity: 0.8;
+    }
+
+    .btn-secondary {
+      background: rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-danger {
+      background: #dc3545;
+      color: #fff;
+    }
+
+    .btn-danger:hover {
+      background: #c82333;
+    }
+
+    .btn-confirm {
+      background: #28a745;
+      color: #fff;
+    }
+
+    .btn-confirm:hover {
+      background: #218838;
+    }
+
+    .btn-cancel {
+      background: rgba(0, 0, 0, 0.1);
+      color: #000;
+    }
+
+    .btn-cancel:hover {
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .row-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    /* 统计信息 */
+    .stats-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+
+    .stat-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+    }
+
+    .stat-label {
+      font-size: 0.9em;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 1.8em;
+      font-weight: 600;
+      color: #000;
+    }
+
+    .stat-value.positive {
+      color: #28a745;
+    }
+
+    .stat-value.negative {
+      color: #dc3545;
+    }
+
+    .back-link {
+      display: inline-block;
+      margin-top: 50px;
+      color: #000;
+      text-decoration: underline;
+      font-size: 1em;
+      font-weight: 400;
+    }
+
+    .back-link:hover {
+      opacity: 0.7;
+    }
+
+    /* 评论区域样式 */
+    .comments-section {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding: 0 20px;
+    }
+
+    .comments-section .giscus {
+      margin-top: 40px;
+    }
+
+    .comments-section .giscus-frame {
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Footer */
+    footer {
+      background: #FFFFFF;
+      border-top: 1px solid rgba(0, 0, 0, 0.1);
+      padding: 40px 0;
+      margin-top: 80px;
+      text-align: center;
+    }
+
+    footer p {
+      color: #666;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 768px) {
+      .header-container {
+        padding: 0 20px;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      nav ul {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+
+      main {
+        padding: 60px 20px;
+      }
+
+      .intro-section h1 {
+        font-size: 2.5em;
+      }
+
+      .table-container {
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 800px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="header-container">
+      <div class="logo-container">
+        <a href="../index.html">
+          <div class="logo-text-container">
+            <div class="logo-text">Cosmos of WW</div>
+            <div class="logo-subtitle">Along with Probability</div>
+          </div>
+        </a>
+      </div>
+      <nav>
+        <ul>
+          <li><a href="../index.html">首页</a></li>
+          <li><a href="../about/">关于我</a></li>
+          <li><a href="./" class="active">投资记录</a></li>
+          <li><a href="../thinking/">思维漫步</a></li>
+          <li>
+            <select id="lang-switcher">
+              <option value="traditional">繁體中文</option>
+              <option value="simplified">简体中文</option>
+            </select>
+          </li>
+        </ul>
+      </nav>
+      <div class="auth-container" id="authContainer">
+        <button class="auth-btn" id="loginBtn" onclick="auth.loginWithGitHub()">GitHub 登录</button>
+        <div class="auth-user" id="userInfo" style="display: none;">
+          <img id="userAvatar" src="" alt="">
+          <span id="userName"></span>
+          <span class="role-badge" id="roleBadge"></span>
+          <button class="auth-btn" id="toggleModeBtn" onclick="auth.toggleViewMode()" style="display: none;">切换到访客模式</button>
+          <button class="auth-btn" onclick="auth.logout()">登出</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="intro-section">
+      <h1>我的持仓分析</h1>
+      <p>记录我的出入金记录和净值，实时计算不同类型的收益率。</p>
+
+      <!-- 统计信息 -->
+      <div class="stats-container" id="statsContainer">
+        <div class="stat-card">
+          <div class="stat-label">当前净值</div>
+          <div class="stat-value" id="currentNetValue">C$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">累计收益</div>
+          <div class="stat-value" id="totalReturn">C$0.00</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">资金加权收益率</div>
+          <div class="stat-value" id="totalReturnRate">0.00%</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">年化收益率</div>
+          <div class="stat-value" id="annualizedReturn">0.00%</div>
+        </div>
+      </div>
+
+      <!-- 图表区域 -->
+      <div class="chart-section">
+        <div class="chart-header">
+          <div class="chart-title">收益率曲线</div>
+          <div style="font-size: 0.85em; color: #666;" id="lastUpdated">最后更新: 刚刚</div>
+        </div>
+        
+        <div class="chart-type-selector">
+          <button class="chart-type-btn active" onclick="switchChartType('return')">收益率曲线</button>
+          <button class="chart-type-btn" onclick="switchChartType('cumulative')">累计收益曲线</button>
+        </div>
+
+        <div class="chart-legend">
+          <div class="legend-item">
+            <div class="legend-color" style="background: #4285f4;"></div>
+            <span>资金加权收益率</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color" style="background: #9c27b0;"></div>
+            <span>标普500</span>
+          </div>
+          <div class="legend-item">
+            <div class="legend-color dashed" style="border-color: #666;"></div>
+            <span>预期收益率</span>
+          </div>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="returnChart"></canvas>
+        </div>
+
+        <div class="time-range-selector">
+          <button class="time-range-btn" onclick="setTimeRange('year')">今年</button>
+          <button class="time-range-btn" onclick="setTimeRange('1year')">近1年</button>
+          <button class="time-range-btn active" onclick="setTimeRange('all')">记账以来</button>
+          <button class="time-range-btn" onclick="setTimeRange('future')">未来</button>
+          <button class="time-range-btn" onclick="setTimeRange('custom')">自定义</button>
+        </div>
+      </div>
+
+      <!-- 出入金记录 -->
+      <div class="table-section admin-only">
+        <h2>出入金记录</h2>
+        <div class="table-actions">
+          <button class="btn" onclick="addCashFlowRow()">+ 添加记录</button>
+        </div>
+        <div class="table-container">
+          <table id="cashFlowTable">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>类型</th>
+                <th>金额 (C$)</th>
+                <th>备注</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="cashFlowTableBody">
+              <!-- 行将通过JavaScript动态添加 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 净值记录 -->
+      <div class="table-section admin-only">
+        <h2>净值记录</h2>
+        <div class="table-actions">
+          <button class="btn" onclick="addNetValueRow()">+ 更新净值</button>
+        </div>
+        <div class="table-container">
+          <table id="netValueTable">
+            <thead>
+              <tr>
+                <th>日期</th>
+                <th>净值 (C$)</th>
+                <th>累计投入 (C$)</th>
+                <th>累计收益 (C$)</th>
+                <th>累计收益率</th>
+                <th>年化收益率</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody id="netValueTableBody">
+              <!-- 行将通过JavaScript动态添加 -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <a href="./" class="back-link">← 返回投资记录</a>
+    </section>
+
+    <!-- 评论区域 -->
+    <section class="comments-section">
+      <div class="giscus"></div>
+    </section>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Cosmos of WW. 记录思考，分享成长。</p>
+  </footer>
+
+  <script src="../js/lang-switcher.js"></script>
+  <!-- 认证模块 -->
+  <script src="../js/auth.js"></script>
+  <!-- Giscus 评论系统 -->
+  <script src="https://giscus.app/client.js"
+          data-repo="cosmos-wonder/cosmos-wonder.github.io"
+          data-repo-id="R_kgDOQkSejw"
+          data-category="General"
+          data-category-id="DIC_kwDOQkSej84CzySo"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
+  <!-- Chart.js 图表库 -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    // 后端API地址 - 自动检测开发/生产环境
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+      ? 'http://localhost:8787'  // 本地开发环境
+      : 'https://blog-backend.cxmwwb.workers.dev';  // 生产环境
+    
+    // 数据存储
+    const STORAGE_KEY_CASHFLOW = 'position_analysis_cashflow';
+    const STORAGE_KEY_NETVALUE = 'position_analysis_netvalue';
+    let cashFlowData = [];
+    let netValueData = [];
+    
+    // 图表相关
+    let returnChart = null;
+    let currentChartType = 'return'; // 'return' 或 'cumulative'
+    let currentTimeRange = 'all'; // 'year', '1year', 'all', 'future', 'custom'
+    let sp500Data = []; // 标普500数据缓存
+
+    // 权限控制
+    function updateUIForRole() {
+      const isAdmin = window.auth && window.auth.isAdmin();
+      
+      // 显示/隐藏 admin-only 元素
+      document.querySelectorAll('.admin-only').forEach(el => {
+        if (isAdmin) {
+          el.classList.add('show');
+          // 根据元素类型添加对应的显示类
+          if (el.tagName === 'TABLE' || el.tagName === 'TBODY' || el.tagName === 'THEAD') {
+            el.classList.add('show-table');
+          } else if (getComputedStyle(el).display === 'flex') {
+            el.classList.add('show-flex');
+          } else if (getComputedStyle(el).display === 'inline' || getComputedStyle(el).display === 'inline-block') {
+            el.classList.add('show-inline');
+          } else {
+            el.classList.add('show');
+          }
+        } else {
+          el.classList.remove('show', 'show-inline', 'show-flex', 'show-table');
+        }
+      });
+    }
+
+    // 获取 API 请求头（包含认证 token）
+    function getAuthHeaders() {
+      const headers = {
+        'Content-Type': 'application/json',
+      };
+      
+      if (window.auth && window.auth.getAuthToken()) {
+        headers['Authorization'] = `Bearer ${window.auth.getAuthToken()}`;
+      }
+      
+      return headers;
+    }
+
+    // 从后端API和localStorage加载数据
+    async function loadData() {
+      try {
+        // 加载出入金记录
+        const cashFlowResponse = await fetch(`${API_BASE_URL}/api/cash-flow`, {
+          headers: getAuthHeaders(),
+        });
+        if (cashFlowResponse.ok) {
+          const cashFlowDb = await cashFlowResponse.json();
+          cashFlowData = cashFlowDb.map(item => ({
+            id: item.id,
+            date: item.record_date,
+            type: item.flow_type,
+            amount: parseFloat(item.amount) || 0,
+            note: item.note || ''
+          }));
+        } else {
+          console.error('从API加载出入金记录失败:', cashFlowResponse.status);
+          // 从 localStorage 加载
+          const cashFlow = localStorage.getItem(STORAGE_KEY_CASHFLOW);
+          cashFlowData = cashFlow ? JSON.parse(cashFlow) : [];
+        }
+
+        // 加载净值记录
+        const netValueResponse = await fetch(`${API_BASE_URL}/api/net-value`, {
+          headers: getAuthHeaders(),
+        });
+        if (netValueResponse.ok) {
+          const netValueDb = await netValueResponse.json();
+          netValueData = netValueDb.map(item => ({
+            id: item.id,
+            date: item.record_date,
+            netValue: parseFloat(item.net_value) || 0
+          }));
+        } else {
+          console.error('从API加载净值记录失败:', netValueResponse.status);
+          // 从 localStorage 加载
+          const netValue = localStorage.getItem(STORAGE_KEY_NETVALUE);
+          netValueData = netValue ? JSON.parse(netValue) : [];
+        }
+      } catch (e) {
+        console.error('加载数据异常:', e);
+        // 从 localStorage 加载
+        const cashFlow = localStorage.getItem(STORAGE_KEY_CASHFLOW);
+        const netValue = localStorage.getItem(STORAGE_KEY_NETVALUE);
+        cashFlowData = cashFlow ? JSON.parse(cashFlow) : [];
+        netValueData = netValue ? JSON.parse(netValue) : [];
+      }
+    }
+
+    // 保存数据到 localStorage（作为备份）
+    function saveToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_CASHFLOW, JSON.stringify(cashFlowData));
+        localStorage.setItem(STORAGE_KEY_NETVALUE, JSON.stringify(netValueData));
+      } catch (e) {
+        console.error('保存到 localStorage 失败:', e);
+      }
+    }
+
+    // 保存数据到后端API和localStorage
+    async function saveData() {
+      // 先保存到 localStorage 作为备份
+      saveToLocalStorage();
+
+      try {
+        // 保存出入金记录
+        for (const item of cashFlowData) {
+          const dbData = {
+            record_date: item.date,
+            flow_type: item.type,
+            amount: item.amount,
+            note: item.note || null
+          };
+
+          // 如果 id 是 UUID 格式（36个字符，包含连字符），包含在请求中用于更新
+          if (item.id && typeof item.id === 'string' && item.id.length === 36 && item.id.includes('-')) {
+            dbData.id = item.id;
+          }
+
+          const response = await fetch(`${API_BASE_URL}/api/cash-flow`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(dbData),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            // 更新本地 id 为数据库返回的 UUID
+            item.id = data.id;
+          } else {
+            const error = await response.text();
+            console.error('保存出入金记录到API失败:', error);
+          }
+        }
+
+        // 保存净值记录
+        for (const item of netValueData) {
+          const dbData = {
+            record_date: item.date,
+            net_value: item.netValue
+          };
+
+          const response = await fetch(`${API_BASE_URL}/api/net-value`, {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(dbData),
+          });
+
+          if (response.ok) {
+            const data = await response.json();
+            // 更新本地 id 为数据库返回的 UUID
+            item.id = data.id;
+          } else {
+            const error = await response.text();
+            console.error('保存净值记录到API失败:', error);
+          }
+        }
+        
+        // 保存更新后的 id 到 localStorage
+        saveToLocalStorage();
+        
+        // 重新加载数据并更新统计信息
+        await loadData();
+        renderCashFlowTable();
+        renderNetValueTable();
+        updateStats();
+        updateChart();
+        updateLastUpdated();
+      } catch (e) {
+        console.error('保存到API失败:', e);
+      }
+    }
+
+    // 计算累计投入
+    function calculateTotalInvested(date) {
+      let total = 0;
+      cashFlowData.forEach(item => {
+        if (new Date(item.date) <= new Date(date)) {
+          if (item.type === 'deposit') {
+            total += parseFloat(item.amount) || 0;
+          } else if (item.type === 'withdraw') {
+            total -= parseFloat(item.amount) || 0;
+          }
+        }
+      });
+      return total;
+    }
+
+    // 计算年化收益率
+    function calculateAnnualizedReturn(startDate, endDate, returnRate) {
+      if (!startDate || !endDate || !returnRate) return 0;
+      const days = (new Date(endDate) - new Date(startDate)) / (1000 * 60 * 60 * 24);
+      if (days <= 0) return 0;
+      const years = days / 365;
+      if (years <= 0) return 0;
+      return ((Math.pow(1 + returnRate / 100, 1 / years) - 1) * 100).toFixed(2);
+    }
+
+    // 更新统计信息
+    function updateStats() {
+      console.log('更新统计信息 - 净值数据:', netValueData.length, '条');
+      console.log('更新统计信息 - 出入金数据:', cashFlowData.length, '条');
+      
+      if (netValueData.length === 0) {
+        document.getElementById('currentNetValue').textContent = 'C$0.00';
+        document.getElementById('totalReturn').textContent = 'C$0.00';
+        document.getElementById('totalReturnRate').textContent = '0.00%';
+        document.getElementById('annualizedReturn').textContent = '0.00%';
+        return;
+      }
+
+      // 找到最新的净值记录（按日期排序，最新的在前）
+      const sortedNetValue = [...netValueData].sort((a, b) => new Date(b.date) - new Date(a.date));
+      const latest = sortedNetValue[0];
+      const currentNetValue = parseFloat(latest.netValue) || 0;
+      
+      // 实时计算累计投入（基于最新的净值日期）
+      const totalInvested = calculateTotalInvested(latest.date);
+      const totalReturn = currentNetValue - totalInvested;
+      const totalReturnRate = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(2) : 0;
+
+      console.log('统计计算:', {
+        currentNetValue,
+        totalInvested,
+        totalReturn,
+        totalReturnRate,
+        latestDate: latest.date
+      });
+
+      // 计算年化收益率（从第一笔投入开始）
+      let firstInvestDate = null;
+      for (const item of cashFlowData) {
+        if (item.type === 'deposit') {
+          if (!firstInvestDate || new Date(item.date) < new Date(firstInvestDate)) {
+            firstInvestDate = item.date;
+          }
+        }
+      }
+      const annualizedReturn = firstInvestDate 
+        ? calculateAnnualizedReturn(firstInvestDate, latest.date, parseFloat(totalReturnRate))
+        : 0;
+
+      // 根据权限显示数据
+      const isAdmin = window.auth && window.auth.isAdmin();
+      
+      const currentNetValueElement = document.getElementById('currentNetValue');
+      if (isAdmin) {
+        currentNetValueElement.textContent = `C$${currentNetValue.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      } else {
+        currentNetValueElement.textContent = 'C$**';
+      }
+      
+      const returnElement = document.getElementById('totalReturn');
+      if (isAdmin) {
+        returnElement.textContent = `C$${totalReturn.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+        returnElement.className = 'stat-value ' + (totalReturn >= 0 ? 'positive' : 'negative');
+      } else {
+        returnElement.textContent = 'C$**';
+        returnElement.className = 'stat-value';
+      }
+
+      const rateElement = document.getElementById('totalReturnRate');
+      rateElement.textContent = `${totalReturnRate >= 0 ? '+' : ''}${totalReturnRate}%`;
+      rateElement.className = 'stat-value ' + (totalReturnRate >= 0 ? 'positive' : 'negative');
+
+      const annualElement = document.getElementById('annualizedReturn');
+      annualElement.textContent = `${annualizedReturn >= 0 ? '+' : ''}${annualizedReturn}%`;
+      annualElement.className = 'stat-value ' + (annualizedReturn >= 0 ? 'positive' : 'negative');
+    }
+
+    // 添加出入金记录行（新增行，不立即保存）
+    function addCashFlowRow(data = {}) {
+      const tbody = document.getElementById('cashFlowTableBody');
+      const row = document.createElement('tr');
+      const id = data.id || Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      const isNew = !data.id;
+      
+      const today = new Date().toISOString().split('T')[0];
+      row.innerHTML = `
+        <td><input type="date" class="date-input" value="${data.date || today}"></td>
+        <td>
+          <select class="type-select">
+            <option value="deposit" ${data.type === 'deposit' ? 'selected' : ''}>入金</option>
+            <option value="withdraw" ${data.type === 'withdraw' ? 'selected' : ''}>出金</option>
+          </select>
+        </td>
+        <td><input type="number" step="0.01" class="amount-input" value="${data.amount || ''}" placeholder="0.00"></td>
+        <td><input type="text" class="note-input" value="${data.note || ''}" placeholder="备注"></td>
+        <td>
+          <div class="row-actions">
+            ${isNew ? '<button class="btn btn-confirm" onclick="confirmCashFlow(\'' + id + '\')">确认</button>' : ''}
+            <button class="btn btn-danger" onclick="deleteCashFlow('${id}')">删除</button>
+          </div>
+        </td>
+      `;
+      row.id = 'cashflow_' + id;
+      row.setAttribute('data-is-new', isNew ? 'true' : 'false');
+      
+      // 添加事件监听器
+      row.querySelector('.date-input').addEventListener('change', () => markCashFlowChanged(id));
+      row.querySelector('.type-select').addEventListener('change', () => markCashFlowChanged(id));
+      row.querySelector('.amount-input').addEventListener('change', () => markCashFlowChanged(id));
+      row.querySelector('.note-input').addEventListener('change', () => markCashFlowChanged(id));
+      
+      // 新行插入到最前面，已存在的行按日期排序
+      if (isNew) {
+        tbody.insertBefore(row, tbody.firstChild);
+      } else {
+        tbody.appendChild(row);
+      }
+    }
+
+    // 确认保存出入金记录
+    async function confirmCashFlow(id) {
+      const row = document.getElementById('cashflow_' + id);
+      if (!row) return;
+
+      const date = row.querySelector('.date-input').value;
+      const type = row.querySelector('.type-select').value;
+      const amount = row.querySelector('.amount-input').value;
+      const note = row.querySelector('.note-input').value;
+
+      if (!date) {
+        alert('请填写日期');
+        return;
+      }
+
+      if (!amount || parseFloat(amount) <= 0) {
+        alert('请填写有效的金额');
+        return;
+      }
+
+      // 保存到数据数组
+      const existingIndex = cashFlowData.findIndex(d => d.id === id);
+      const data = {
+        id,
+        date,
+        type,
+        amount: parseFloat(amount),
+        note
+      };
+
+      if (existingIndex >= 0) {
+        cashFlowData[existingIndex] = data;
+      } else {
+        cashFlowData.push(data);
+      }
+
+      // 保存到 Supabase 和 localStorage
+      await saveData();
+      
+      // 移除确认按钮
+      const confirmBtn = row.querySelector('.btn-confirm');
+      if (confirmBtn) {
+        confirmBtn.remove();
+      }
+      row.setAttribute('data-is-new', 'false');
+      
+      // 重新加载数据并更新（确保使用数据库中的最新数据）
+      await loadData();
+      renderCashFlowTable();
+      recalculateNetValues();
+    }
+
+    // 标记出入金记录已修改（不再自动保存）
+    function markCashFlowChanged(id) {
+      const row = document.getElementById('cashflow_' + id);
+      if (row && row.getAttribute('data-is-new') === 'false') {
+        // 如果是已存在的记录，添加确认按钮
+        const actionsCell = row.querySelector('.row-actions');
+        if (actionsCell && !actionsCell.querySelector('.btn-confirm')) {
+          const confirmBtn = document.createElement('button');
+          confirmBtn.className = 'btn btn-confirm';
+          confirmBtn.textContent = '确认';
+          confirmBtn.onclick = () => confirmCashFlow(id);
+          actionsCell.insertBefore(confirmBtn, actionsCell.firstChild);
+        }
+      }
+    }
+
+    // 删除出入金记录
+    async function deleteCashFlow(id) {
+      if (confirm('确定要删除这条记录吗？')) {
+        // 从数据数组中删除
+        const item = cashFlowData.find(d => d.id === id);
+        cashFlowData = cashFlowData.filter(d => d.id !== id);
+        
+        // 从API删除
+        if (item && item.id && typeof item.id === 'string' && item.id.length === 36 && item.id.includes('-')) {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/cash-flow?id=${encodeURIComponent(id)}`, {
+              method: 'DELETE',
+              headers: getAuthHeaders(),
+            });
+            
+            if (!response.ok) {
+              const error = await response.text();
+              console.error('从API删除出入金记录失败:', error);
+            }
+          } catch (e) {
+            console.error('删除操作异常:', e);
+          }
+        }
+        
+        await saveData();
+        // 重新加载数据并更新
+        await loadData();
+        renderCashFlowTable();
+        recalculateNetValues();
+      }
+    }
+
+    // 渲染出入金表格
+    function renderCashFlowTable() {
+      const tbody = document.getElementById('cashFlowTableBody');
+      tbody.innerHTML = '';
+      // 按日期降序排序（最新的在前）
+      cashFlowData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      cashFlowData.forEach(item => addCashFlowRow(item));
+    }
+
+    // 添加净值记录行
+    function addNetValueRow(data = {}) {
+      const tbody = document.getElementById('netValueTableBody');
+      const row = document.createElement('tr');
+      const id = data.id || Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+      const today = new Date().toISOString().split('T')[0];
+      const netValue = parseFloat(data.netValue) || 0;
+      const date = data.date || today;
+      const totalInvested = calculateTotalInvested(date);
+      const totalReturn = netValue - totalInvested;
+      const totalReturnRate = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(2) : 0;
+
+      // 计算年化收益率
+      let firstInvestDate = null;
+      for (const item of cashFlowData) {
+        if (item.type === 'deposit') {
+          if (!firstInvestDate || new Date(item.date) < new Date(firstInvestDate)) {
+            firstInvestDate = item.date;
+          }
+        }
+      }
+      const annualizedReturn = firstInvestDate 
+        ? calculateAnnualizedReturn(firstInvestDate, date, parseFloat(totalReturnRate))
+        : 0;
+
+      const isNew = !data.id;
+      row.innerHTML = `
+        <td><input type="date" class="date-input" value="${date}"></td>
+        <td><input type="number" step="0.01" class="netvalue-input" value="${netValue}" placeholder="0.00"></td>
+        <td class="total-invested-cell">C$${totalInvested.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td class="total-return-cell ${totalReturn >= 0 ? 'positive' : 'negative'}">C$${totalReturn.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+        <td class="return-rate-cell ${totalReturnRate >= 0 ? 'positive' : 'negative'}">${totalReturnRate >= 0 ? '+' : ''}${totalReturnRate}%</td>
+        <td class="annualized-cell ${annualizedReturn >= 0 ? 'positive' : 'negative'}">${annualizedReturn >= 0 ? '+' : ''}${annualizedReturn}%</td>
+        <td>
+          <div class="row-actions">
+            ${isNew ? '<button class="btn btn-confirm" onclick="confirmNetValue(\'' + id + '\')">确认</button>' : ''}
+            <button class="btn btn-danger" onclick="deleteNetValue('${id}')">删除</button>
+          </div>
+        </td>
+      `;
+      row.id = 'netvalue_' + id;
+      row.setAttribute('data-is-new', isNew ? 'true' : 'false');
+      
+      // 添加事件监听器
+      row.querySelector('.date-input').addEventListener('change', () => {
+        markNetValueChanged(id);
+        updateNetValueRow(id);
+      });
+      row.querySelector('.netvalue-input').addEventListener('change', () => {
+        markNetValueChanged(id);
+        updateNetValueRow(id);
+      });
+
+      // 新行插入到最前面，已存在的行按日期排序
+      if (isNew) {
+        tbody.insertBefore(row, tbody.firstChild);
+      } else {
+        tbody.appendChild(row);
+      }
+    }
+
+    // 更新净值行的显示（不保存数据）
+    function updateNetValueRow(id) {
+      const row = document.getElementById('netvalue_' + id);
+      if (!row) return;
+
+      const date = row.querySelector('.date-input').value;
+      const netValue = parseFloat(row.querySelector('.netvalue-input').value) || 0;
+      
+      if (!date) return;
+
+      const totalInvested = calculateTotalInvested(date);
+      const totalReturn = netValue - totalInvested;
+      const totalReturnRate = totalInvested > 0 ? ((totalReturn / totalInvested) * 100).toFixed(2) : 0;
+
+      // 计算年化收益率
+      let firstInvestDate = null;
+      for (const item of cashFlowData) {
+        if (item.type === 'deposit') {
+          if (!firstInvestDate || new Date(item.date) < new Date(firstInvestDate)) {
+            firstInvestDate = item.date;
+          }
+        }
+      }
+      const annualizedReturn = firstInvestDate 
+        ? calculateAnnualizedReturn(firstInvestDate, date, parseFloat(totalReturnRate))
+        : 0;
+
+      // 更新显示
+      row.querySelector('.total-invested-cell').textContent = `C$${totalInvested.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      
+      const returnCell = row.querySelector('.total-return-cell');
+      returnCell.textContent = `C$${totalReturn.toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+      returnCell.className = 'total-return-cell ' + (totalReturn >= 0 ? 'positive' : 'negative');
+
+      const rateCell = row.querySelector('.return-rate-cell');
+      rateCell.textContent = `${totalReturnRate >= 0 ? '+' : ''}${totalReturnRate}%`;
+      rateCell.className = 'return-rate-cell ' + (totalReturnRate >= 0 ? 'positive' : 'negative');
+
+      const annualCell = row.querySelector('.annualized-cell');
+      annualCell.textContent = `${annualizedReturn >= 0 ? '+' : ''}${annualizedReturn}%`;
+      annualCell.className = 'annualized-cell ' + (annualizedReturn >= 0 ? 'positive' : 'negative');
+    }
+
+    // 确认保存净值记录
+    async function confirmNetValue(id) {
+      const row = document.getElementById('netvalue_' + id);
+      if (!row) return;
+
+      const date = row.querySelector('.date-input').value;
+      const netValue = parseFloat(row.querySelector('.netvalue-input').value) || 0;
+
+      if (!date) {
+        alert('请填写日期');
+        return;
+      }
+
+      if (netValue < 0) {
+        alert('净值不能为负数');
+        return;
+      }
+
+      // 保存到数据数组
+      const existingIndex = netValueData.findIndex(d => d.id === id);
+      const data = {
+        id,
+        date,
+        netValue
+      };
+
+      if (existingIndex >= 0) {
+        netValueData[existingIndex] = data;
+      } else {
+        netValueData.push(data);
+      }
+
+      // 保存到 Supabase 和 localStorage
+      await saveData();
+      
+      // 移除确认按钮
+      const confirmBtn = row.querySelector('.btn-confirm');
+      if (confirmBtn) {
+        confirmBtn.remove();
+      }
+      row.setAttribute('data-is-new', 'false');
+      
+      // 重新加载数据并更新（确保使用数据库中的最新数据）
+      await loadData();
+      renderNetValueTable();
+      updateStats();
+      updateChart();
+      updateLastUpdated();
+    }
+
+    // 标记净值记录已修改
+    function markNetValueChanged(id) {
+      const row = document.getElementById('netvalue_' + id);
+      if (row && row.getAttribute('data-is-new') === 'false') {
+        // 如果是已存在的记录，添加确认按钮
+        const actionsCell = row.querySelector('.row-actions');
+        if (actionsCell && !actionsCell.querySelector('.btn-confirm')) {
+          const confirmBtn = document.createElement('button');
+          confirmBtn.className = 'btn btn-confirm';
+          confirmBtn.textContent = '确认';
+          confirmBtn.onclick = () => confirmNetValue(id);
+          actionsCell.insertBefore(confirmBtn, actionsCell.firstChild);
+        }
+      }
+    }
+
+
+    // 删除净值记录
+    async function deleteNetValue(id) {
+      if (confirm('确定要删除这条记录吗？')) {
+        // 从数据数组中删除
+        const item = netValueData.find(d => d.id === id);
+        netValueData = netValueData.filter(d => d.id !== id);
+        
+        // 从API删除
+        if (item && item.id && typeof item.id === 'string' && item.id.length === 36 && item.id.includes('-')) {
+          try {
+            const response = await fetch(`${API_BASE_URL}/api/net-value?id=${encodeURIComponent(id)}`, {
+              method: 'DELETE',
+              headers: getAuthHeaders(),
+            });
+            
+            if (!response.ok) {
+              const error = await response.text();
+              console.error('从API删除净值记录失败:', error);
+            }
+          } catch (e) {
+            console.error('删除操作异常:', e);
+          }
+        }
+        
+        await saveData();
+        // 重新加载数据并更新
+        await loadData();
+        renderNetValueTable();
+        updateStats();
+        updateChart();
+        updateLastUpdated();
+      }
+    }
+
+    // 重新计算所有净值记录
+    function recalculateNetValues() {
+      renderNetValueTable();
+      updateStats();
+      updateChart();
+      updateLastUpdated();
+    }
+
+    // 渲染净值表格
+    function renderNetValueTable() {
+      const tbody = document.getElementById('netValueTableBody');
+      tbody.innerHTML = '';
+      // 按日期降序排序（最新的在前）
+      netValueData.sort((a, b) => new Date(b.date) - new Date(a.date));
+      netValueData.forEach(item => addNetValueRow(item));
+    }
+
+    // 获取标普500数据
+    // 方法1: 使用 Alpha Vantage API (需要免费注册获取API key: https://www.alphavantage.co/support/#api-key)
+    // 方法2: 使用 Yahoo Finance (通过CORS代理)
+    // 方法3: 使用 Polygon.io (需要免费注册获取API key: https://polygon.io/)
+    async function fetchSP500Data(startDate, endDate) {
+      // 如果已有缓存数据，直接返回
+      if (sp500Data.length > 0) {
+        console.log('使用缓存的标普500数据:', sp500Data.length, '条');
+        return sp500Data;
+      }
+
+      try {
+        // 方法1: Alpha Vantage (推荐，但需要API key)
+        // 将下面的 YOUR_API_KEY 替换为你的 Alpha Vantage API key
+        // 注册地址: https://www.alphavantage.co/support/#api-key
+        const ALPHA_VANTAGE_API_KEY = '9EH2Q6BW8X7N6PCC'; // 请在这里填入你的API key
+        
+        if (ALPHA_VANTAGE_API_KEY) {
+          // 使用免费版本的 TIME_SERIES_DAILY 端点（不是 TIME_SERIES_DAILY_ADJUSTED）
+          // 注意：免费版本不支持 outputsize=full，只能使用 compact（最近100个数据点）
+          const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=SPY&outputsize=compact&apikey=${ALPHA_VANTAGE_API_KEY}`;
+          console.log('正在从Alpha Vantage获取标普500数据（免费版本，最近100个交易日）...');
+          
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          // 检查API错误
+          if (data['Error Message']) {
+            console.error('Alpha Vantage API错误:', data['Error Message']);
+            throw new Error(data['Error Message']);
+          }
+          
+          if (data['Note']) {
+            console.warn('Alpha Vantage API提示:', data['Note']);
+            // API调用频率超限，直接返回，不尝试其他方法（避免不必要的请求）
+            console.warn('API调用频率超限，请稍后再试或等待一段时间后刷新页面');
+            return [];
+          }
+          
+          // 检查是否是premium端点提示
+          if (data['Information']) {
+            console.warn('Alpha Vantage API提示:', data['Information']);
+            console.warn('检测到premium端点提示，已切换到免费版本');
+            // 继续尝试，因为我们已经使用免费版本了
+          }
+          
+          // 免费版本使用 'Time Series (Daily)' 而不是 'Time Series (Daily Adjusted)'
+          // 字段使用 '4. close' 而不是 '5. adjusted close'
+          if (data['Time Series (Daily)']) {
+            const timeSeries = data['Time Series (Daily)'];
+            const dates = Object.keys(timeSeries).sort();
+            console.log('✓ 成功获取标普500数据:', dates.length, '条记录');
+            console.log('日期范围:', dates[0], '到', dates[dates.length - 1]);
+            
+            // 免费版本使用 '4. close' 字段
+            const firstPrice = parseFloat(timeSeries[dates[0]]['4. close']);
+            console.log('初始价格:', firstPrice);
+            
+            sp500Data = dates.map(date => {
+              // 免费版本使用 '4. close' 字段
+              const price = parseFloat(timeSeries[date]['4. close']);
+              const returnRate = ((price - firstPrice) / firstPrice * 100).toFixed(2);
+              return { date, returnRate: parseFloat(returnRate) };
+            });
+            
+            console.log('标普500数据示例（前5条）:', sp500Data.slice(0, 5));
+            return sp500Data;
+          } else if (!data['Error Message'] && !data['Note'] && !data['Information']) {
+            // 既没有数据，也没有错误信息，可能是其他问题
+            console.warn('Alpha Vantage返回数据格式异常，响应:', data);
+          }
+        }
+
+        // 方法2: 使用 Yahoo Finance (通过CORS代理 - 可能不稳定)
+        // 只在Alpha Vantage完全失败（没有API key或API key无效）时才尝试
+        // 注意：Yahoo Finance代理可能不稳定，如果Alpha Vantage可用，优先使用Alpha Vantage
+        if (!ALPHA_VANTAGE_API_KEY) {
+          console.log('Alpha Vantage API key未配置，尝试使用Yahoo Finance获取数据...');
+          try {
+            const proxyUrl = 'https://api.allorigins.win/get?url=';
+            const yahooUrl = `https://query1.finance.yahoo.com/v8/finance/chart/%5ESPX?interval=1d&range=5y`;
+            const response = await fetch(proxyUrl + encodeURIComponent(yahooUrl), {
+              // 添加超时处理
+              signal: AbortSignal.timeout(10000) // 10秒超时
+            });
+            
+            if (!response.ok) {
+              throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            
+            const data = await response.json();
+            const chartData = JSON.parse(data.contents);
+            
+            if (chartData.chart && chartData.chart.result && chartData.chart.result[0]) {
+              const result = chartData.chart.result[0];
+              const timestamps = result.timestamp;
+              const prices = result.indicators.quote[0].close;
+              const firstPrice = prices.find(p => p !== null);
+              
+              if (!firstPrice) {
+                throw new Error('无法找到有效的价格数据');
+              }
+              
+              sp500Data = timestamps.map((timestamp, index) => {
+                const date = new Date(timestamp * 1000).toISOString().split('T')[0];
+                const price = prices[index];
+                if (price && firstPrice) {
+                  const returnRate = ((price - firstPrice) / firstPrice * 100).toFixed(2);
+                  return { date, returnRate: parseFloat(returnRate) };
+                }
+                return null;
+              }).filter(item => item !== null);
+              
+              console.log('✓ 成功从Yahoo Finance获取标普500数据:', sp500Data.length, '条');
+              return sp500Data;
+            }
+          } catch (e) {
+            console.warn('Yahoo Finance API获取失败:', e.message);
+            console.warn('建议：配置Alpha Vantage API key以获得更稳定的数据源');
+          }
+        } else {
+          console.log('Alpha Vantage API key已配置，跳过Yahoo Finance（避免不必要的请求）');
+        }
+
+        // 方法3: 使用 Polygon.io (需要免费注册获取API key: https://polygon.io/)
+        // 将下面的 YOUR_POLYGON_API_KEY 替换为你的 Polygon API key
+        const POLYGON_API_KEY = ''; // 请在这里填入你的API key
+        
+        if (POLYGON_API_KEY) {
+          const url = `https://api.polygon.io/v2/aggs/ticker/SPY/range/1/day/${startDate}/${endDate}?adjusted=true&sort=asc&apikey=${POLYGON_API_KEY}`;
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          if (data.results && data.results.length > 0) {
+            const firstPrice = data.results[0].c; // 收盘价
+            
+            sp500Data = data.results.map(result => {
+              const date = new Date(result.t).toISOString().split('T')[0];
+              const price = result.c;
+              const returnRate = ((price - firstPrice) / firstPrice * 100).toFixed(2);
+              return { date, returnRate: parseFloat(returnRate) };
+            });
+            
+            return sp500Data;
+          }
+        }
+
+        console.warn('所有API方法都失败，无法获取标普500数据');
+        return [];
+      } catch (error) {
+        console.error('获取标普500数据失败:', error);
+        return [];
+      }
+    }
+
+    // 准备图表数据
+    async function prepareChartData() {
+      if (netValueData.length === 0) {
+        return { labels: [], returnData: [], cumulativeData: [], sp500Data: [] };
+      }
+
+      // 按日期升序排序（用于图表显示）
+      const sortedData = [...netValueData].sort((a, b) => new Date(a.date) - new Date(b.date));
+      
+      const labels = [];
+      const returnData = [];
+      const cumulativeData = [];
+      
+      let firstNetValue = null;
+      let firstInvested = null;
+      let firstDate = null;
+      let lastDate = null;
+
+      sortedData.forEach((item, index) => {
+        const date = item.date;
+        const netValue = parseFloat(item.netValue) || 0;
+        const totalInvested = calculateTotalInvested(date);
+        
+        if (index === 0) {
+          firstNetValue = netValue;
+          firstInvested = totalInvested;
+          firstDate = date;
+        }
+        lastDate = date;
+
+        labels.push(date);
+        
+        // 计算收益率（相对于初始投入）
+        const returnRate = firstInvested > 0 
+          ? ((netValue - firstInvested) / firstInvested * 100).toFixed(2)
+          : 0;
+        returnData.push(parseFloat(returnRate));
+        
+        // 累计收益
+        cumulativeData.push(netValue - totalInvested);
+      });
+
+      // 获取标普500数据
+      let sp500ReturnData = [];
+      if (firstDate && lastDate) {
+        console.log('准备对齐标普500数据，净值日期范围:', firstDate, '到', lastDate);
+        const sp500Data = await fetchSP500Data(firstDate, lastDate);
+        console.log('获取到的标普500数据:', sp500Data.length, '条');
+        
+        // 将标普500数据对齐到净值数据的日期（使用最近的有效交易日）
+        sp500ReturnData = labels.map(label => {
+          const labelDate = new Date(label);
+          
+          // 先尝试精确匹配
+          let sp500Item = sp500Data.find(item => item.date === label);
+          
+          // 如果没有精确匹配，找最近的交易日（之前的最近日期）
+          if (!sp500Item) {
+            const availableItems = sp500Data
+              .filter(item => {
+                const itemDate = new Date(item.date);
+                return itemDate <= labelDate;
+              })
+              .sort((a, b) => new Date(b.date) - new Date(a.date));
+            
+            if (availableItems.length > 0) {
+              sp500Item = availableItems[0];
+            }
+          }
+          
+          return sp500Item ? sp500Item.returnRate : null;
+        });
+        
+        const validDataPoints = sp500ReturnData.filter(v => v !== null).length;
+        console.log('对齐后的标普500数据:', validDataPoints, '个有效数据点（共', labels.length, '个日期）');
+      }
+
+      return { labels, returnData, cumulativeData, sp500Data: sp500ReturnData };
+    }
+
+    // 初始化图表
+    async function initChart() {
+      const ctx = document.getElementById('returnChart');
+      if (!ctx) return;
+
+      const { labels, returnData, cumulativeData, sp500Data } = await prepareChartData();
+
+      const config = {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: '资金加权收益率',
+              data: returnData,
+              borderColor: '#4285f4',
+              backgroundColor: 'rgba(66, 133, 244, 0.1)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 4
+            },
+            {
+              label: '标普500',
+              data: sp500Data.length > 0 ? sp500Data : returnData.map(() => null),
+              borderColor: '#9c27b0',
+              backgroundColor: 'rgba(156, 39, 176, 0.1)',
+              borderWidth: 2,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              borderDash: [5, 5],
+              hidden: sp500Data.length === 0 // 如果没有数据，默认隐藏
+            },
+            {
+              label: '预期收益率',
+              data: returnData.map(() => null), // 占位
+              borderColor: '#666',
+              backgroundColor: 'rgba(102, 102, 102, 0.1)',
+              borderWidth: 1,
+              fill: false,
+              tension: 0.4,
+              pointRadius: 0,
+              borderDash: [5, 5]
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: {
+            legend: {
+              display: false
+            },
+            tooltip: {
+              mode: 'index',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  if (currentChartType === 'return') {
+                    return context.dataset.label + ': ' + parseFloat(context.parsed.y).toFixed(2) + '%';
+                  } else {
+                    return context.dataset.label + ': C$' + parseFloat(context.parsed.y).toLocaleString('en-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                  }
+                }
+              }
+            }
+          },
+          scales: {
+            x: {
+              display: true,
+              grid: {
+                display: false
+              }
+            },
+            y: {
+              display: true,
+              grid: {
+                color: 'rgba(0, 0, 0, 0.05)'
+              },
+              ticks: {
+                callback: function(value) {
+                  if (currentChartType === 'return') {
+                    return value.toFixed(0) + '%';
+                  } else {
+                    return 'C$' + value.toLocaleString('en-CA');
+                  }
+                }
+              }
+            }
+          },
+          interaction: {
+            mode: 'index',
+            intersect: false
+          }
+        }
+      };
+
+      if (returnChart) {
+        returnChart.destroy();
+      }
+
+      returnChart = new Chart(ctx, config);
+      updateChart();
+    }
+
+    // 更新图表
+    async function updateChart() {
+      if (!returnChart) return;
+
+      const { labels, returnData, cumulativeData, sp500Data } = await prepareChartData();
+      
+      returnChart.data.labels = labels;
+      
+      if (currentChartType === 'return') {
+        returnChart.data.datasets[0].data = returnData;
+        returnChart.data.datasets[0].label = '资金加权收益率';
+        // 更新标普500数据（如果是收益率模式）
+        if (sp500Data.length > 0) {
+          returnChart.data.datasets[1].data = sp500Data;
+          returnChart.data.datasets[1].hidden = false;
+        }
+        returnChart.options.scales.y.ticks.callback = function(value) {
+          return value.toFixed(0) + '%';
+        };
+      } else {
+        returnChart.data.datasets[0].data = cumulativeData;
+        returnChart.data.datasets[0].label = '累计收益';
+        // 累计收益模式下，标普500不显示（因为单位不同）
+        returnChart.data.datasets[1].hidden = true;
+        returnChart.options.scales.y.ticks.callback = function(value) {
+          return 'C$' + value.toLocaleString('en-CA');
+        };
+      }
+      
+      returnChart.update();
+    }
+
+    // 切换图表类型
+    function switchChartType(type) {
+      currentChartType = type;
+      
+      // 更新按钮状态
+      document.querySelectorAll('.chart-type-btn').forEach(btn => {
+        btn.classList.remove('active');
+        if (btn.textContent.trim() === (type === 'return' ? '收益率曲线' : '累计收益曲线')) {
+          btn.classList.add('active');
+        }
+      });
+      
+      updateChart();
+    }
+
+    // 设置时间范围
+    function setTimeRange(range) {
+      currentTimeRange = range;
+      
+      // 更新按钮状态
+      document.querySelectorAll('.time-range-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      if (event && event.target) {
+        event.target.classList.add('active');
+      } else {
+        // 如果没有event对象，通过文本匹配
+        document.querySelectorAll('.time-range-btn').forEach(btn => {
+          const rangeTexts = {
+            'year': '今年',
+            '1year': '近1年',
+            'all': '记账以来',
+            'future': '未来',
+            'custom': '自定义'
+          };
+          if (btn.textContent.trim() === rangeTexts[range]) {
+            btn.classList.add('active');
+          }
+        });
+      }
+      
+      // 根据时间范围过滤数据
+      filterChartData();
+    }
+
+    // 根据时间范围过滤数据
+    function filterChartData() {
+      if (!returnChart) return;
+      
+      const { labels, returnData, cumulativeData } = prepareChartData();
+      const now = new Date();
+      let filteredLabels = [...labels];
+      let filteredReturnData = [...returnData];
+      let filteredCumulativeData = [...cumulativeData];
+      
+      if (currentTimeRange === 'year') {
+        const yearStart = new Date(now.getFullYear(), 0, 1);
+        const indices = labels.map((label, index) => {
+          return new Date(label) >= yearStart ? index : -1;
+        }).filter(i => i >= 0);
+        filteredLabels = indices.map(i => labels[i]);
+        filteredReturnData = indices.map(i => returnData[i]);
+        filteredCumulativeData = indices.map(i => cumulativeData[i]);
+      } else if (currentTimeRange === '1year') {
+        const oneYearAgo = new Date(now.getTime() - 365 * 24 * 60 * 60 * 1000);
+        const indices = labels.map((label, index) => {
+          return new Date(label) >= oneYearAgo ? index : -1;
+        }).filter(i => i >= 0);
+        filteredLabels = indices.map(i => labels[i]);
+        filteredReturnData = indices.map(i => returnData[i]);
+        filteredCumulativeData = indices.map(i => cumulativeData[i]);
+      }
+      // 'all' 和 'future' 暂时不实现过滤
+      
+      returnChart.data.labels = filteredLabels;
+      if (currentChartType === 'return') {
+        returnChart.data.datasets[0].data = filteredReturnData;
+      } else {
+        returnChart.data.datasets[0].data = filteredCumulativeData;
+      }
+      returnChart.update();
+    }
+
+    // 更新最后更新时间
+    function updateLastUpdated() {
+      if (netValueData.length === 0) {
+        document.getElementById('lastUpdated').textContent = '最后更新: 暂无数据';
+        return;
+      }
+      
+      const latest = netValueData[netValueData.length - 1];
+      const updateDate = new Date(latest.date);
+      const now = new Date();
+      const diffDays = Math.floor((now - updateDate) / (1000 * 60 * 60 * 24));
+      
+      let text = '最后更新: ';
+      if (diffDays === 0) {
+        text += '今天';
+      } else if (diffDays === 1) {
+        text += '1天前';
+      } else {
+        text += diffDays + '天前';
+      }
+      
+      document.getElementById('lastUpdated').textContent = text;
+    }
+
+    // 更新认证 UI
+    function updateAuthUI() {
+      const user = window.auth ? window.auth.getCurrentUser() : null;
+      const role = window.auth ? window.auth.getViewMode() : 'guest';
+      const isAdmin = window.auth ? window.auth.isAdmin() : false;
+
+      const loginBtn = document.getElementById('loginBtn');
+      const userInfo = document.getElementById('userInfo');
+      const userName = document.getElementById('userName');
+      const userAvatar = document.getElementById('userAvatar');
+      const roleBadge = document.getElementById('roleBadge');
+      const toggleModeBtn = document.getElementById('toggleModeBtn');
+
+      if (user) {
+        loginBtn.style.display = 'none';
+        userInfo.style.display = 'flex';
+        userName.textContent = user.name || user.login;
+        userAvatar.src = user.avatar_url;
+        userAvatar.alt = user.login;
+        roleBadge.textContent = role === 'admin' ? '管理员' : '访客';
+        roleBadge.className = `role-badge ${role}`;
+        
+        // 只有 admin 可以切换模式
+        if (window.auth.getCurrentRole() === 'admin') {
+          toggleModeBtn.style.display = 'inline-block';
+          toggleModeBtn.textContent = role === 'admin' ? '切换到访客模式' : '切换到管理员模式';
+        } else {
+          toggleModeBtn.style.display = 'none';
+        }
+      } else {
+        loginBtn.style.display = 'inline-block';
+        userInfo.style.display = 'none';
+      }
+
+      // 更新 UI 权限控制
+      updateUIForRole();
+    }
+
+    // 监听认证状态变化
+    document.addEventListener('authStateChanged', () => {
+      updateAuthUI();
+      // 重新加载数据以应用权限
+      loadData().then(() => {
+        renderCashFlowTable();
+        renderNetValueTable();
+        updateStats();
+        updateChart();
+      });
+    });
+
+    // 初始化
+    document.addEventListener('DOMContentLoaded', async function() {
+      // 等待认证模块初始化
+      await new Promise(resolve => {
+        if (window.auth) {
+          resolve();
+        } else {
+          const checkAuth = setInterval(() => {
+            if (window.auth) {
+              clearInterval(checkAuth);
+              resolve();
+            }
+          }, 100);
+        }
+      });
+
+      updateAuthUI();
+      await loadData();
+      renderCashFlowTable();
+      renderNetValueTable();
+      updateStats();
+      initChart();
+      updateLastUpdated();
+    });
+  </script>
+</body>
+</html>
+
