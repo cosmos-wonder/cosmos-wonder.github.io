@@ -274,16 +274,18 @@
 
     .chart-container {
       margin: 40px 0;
-      padding: 20px;
+      padding: 25px;
       background: #FFFFFF;
       border: 1px solid rgba(0, 0, 0, 0.1);
       border-radius: 4px;
+      overflow-x: auto;
     }
 
     .chart-container svg {
       width: 100%;
       height: auto;
-      max-width: 600px;
+      min-width: 600px;
+      max-width: 100%;
       display: block;
       margin: 0 auto;
     }
@@ -472,87 +474,6 @@
         也可以把当前的期权，和其他股票的期权进行对比。
      </p>
 
-
-       <h2 id="option-price-curve">期权价格曲线</h2>
-       <ul>
-        <li>call option</li>
-        到期收益曲线，和横坐标的距离，就是内在价值。（期权到期，只有内在，没有时间）
-        <!-- 到期收益曲线图 -->
-        <div class="chart-container">
-          <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.3em; font-weight: 500;">到期收益曲线图</h3>
-          <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
-            <!-- 坐标轴 -->
-            <line x1="50" y1="350" x2="550" y2="350" class="chart-axis" />
-            <line x1="50" y1="350" x2="50" y2="50" class="chart-axis" />
-            
-            <!-- 坐标轴标签 -->
-            <text x="300" y="390" text-anchor="middle" class="chart-label">股价</text>
-            <text x="20" y="200" text-anchor="middle" class="chart-label" transform="rotate(-90 20 200)">收益</text>
-            
-            <!-- 原点标记 -->
-            <circle cx="50" cy="350" r="3" fill="#000" />
-            
-            <!-- 零收益线（横坐标） -->
-            <line x1="50" y1="350" x2="550" y2="350" stroke="#999" stroke-width="1" stroke-dasharray="5,5" opacity="0.5" />
-            
-            <!-- Call 到期收益曲线（hockey stick形状，从执行价开始转折） -->
-            <path d="M 50 350 L 300 350 L 550 100" class="chart-line expiration-value" stroke-width="3" />
-            <text x="560" y="105" class="chart-label" fill="#2196F3">Call 到期收益</text>
-            
-            <!-- 执行价标记 -->
-            <line x1="300" y1="350" x2="300" y2="340" stroke="#666" stroke-width="2" />
-            <text x="300" y="365" text-anchor="middle" class="chart-label" fill="#666">执行价</text>
-            
-            <!-- 内在价值标注 -->
-            <line x1="400" y1="350" x2="400" y2="250" stroke="#F44336" stroke-width="2" stroke-dasharray="3,3" />
-            <text x="410" y="295" class="chart-label" fill="#F44336">内在价值</text>
-          </svg>
-        </div>
-
-         <p>
-           可以看的出来，股价越高，期权价格对股价约敏感，反之则不敏感。
-           <strong>所以，当做带方向期权的时候，敏感度越高越好；做波动率期权的时候，敏感度越低越好。当然，这里指的是做多。</strong>
-         </p>
-        <!-- 期权价格曲线图 -->
-        <div class="chart-container">
-          <h3 style="margin-top: 0; margin-bottom: 20px; font-size: 1.3em; font-weight: 500;">期权价格曲线图</h3>
-          <svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
-            <!-- 坐标轴 -->
-            <line x1="50" y1="350" x2="550" y2="350" class="chart-axis" />
-            <line x1="50" y1="350" x2="50" y2="50" class="chart-axis" />
-            
-            <!-- 坐标轴标签 -->
-            <text x="300" y="390" text-anchor="middle" class="chart-label">股价</text>
-            <text x="20" y="200" text-anchor="middle" class="chart-label" transform="rotate(-90 20 200)">价格</text>
-            
-            <!-- 原点标记 -->
-            <circle cx="50" cy="350" r="3" fill="#000" />
-            
-            <!-- Call 到期价值线（蓝色，hockey stick形状） -->
-            <path d="M 50 350 L 300 350 L 550 100" class="chart-line expiration-value" />
-            <text x="560" y="105" class="chart-label" fill="#2196F3">Call 到期价值</text>
-            
-            <!-- Call 价格曲线（绿色，凸曲线） -->
-            <path d="M 50 350 Q 150 340 200 320 Q 250 300 300 280 Q 350 250 400 200 Q 450 150 500 120 Q 520 110 550 105" 
-                  class="chart-line call-price" />
-            <text x="560" y="100" class="chart-label" fill="#4CAF50">Call 价格</text>
-            
-            <!-- 时间价值线（红色垂直线，在内在价值区域） -->
-            <line x1="300" y1="350" x2="300" y2="280" class="chart-time-value" />
-            <line x1="350" y1="350" x2="350" y2="250" class="chart-time-value" />
-            <line x1="400" y1="350" x2="400" y2="200" class="chart-time-value" />
-            <line x1="450" y1="350" x2="450" y2="150" class="chart-time-value" />
-            <line x1="500" y1="350" x2="500" y2="120" class="chart-time-value" />
-            
-            <!-- 执行价标记 -->
-            <line x1="300" y1="350" x2="300" y2="340" stroke="#666" stroke-width="2" />
-            <text x="300" y="365" text-anchor="middle" class="chart-label" fill="#666">执行价</text>
-            
-            <!-- 到期标签 -->
-            <text x="480" y="40" class="chart-title" fill="#FF9800">到期</text>
-          </svg>
-        </div>
-       </ul>
       <h2 id="greeks">希腊字母</h2>
       <ul>
         <li>Delta</li>
