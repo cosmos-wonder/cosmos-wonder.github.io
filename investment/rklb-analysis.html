@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>投资记录 - Cosmos of WW</title>
+  <title>火箭实验室 (RKLB) 公司分析 - Cosmos of WW</title>
   <style>
     * {
       margin: 0;
@@ -59,16 +59,6 @@
       flex-direction: column;
       align-items: flex-start;
       gap: 4px;
-    }
-
-    .logo-container a {
-      text-decoration: none;
-      color: inherit;
-      transition: opacity 0.2s;
-    }
-
-    .logo-container a:hover {
-      opacity: 0.7;
     }
 
     .logo-text-container {
@@ -154,48 +144,69 @@
       font-size: 3.5em;
       font-weight: 400;
       line-height: 1.2;
-      margin-bottom: 50px;
-      font-family: 'Georgia', serif;
-      color: #000;
-    }
-
-    .about-links {
-      margin: 40px 0;
-    }
-
-    .about-section {
-      margin-bottom: 40px;
-    }
-
-    .about-section h2 {
-      font-size: 1.8em;
-      font-weight: 400;
       margin-bottom: 20px;
       font-family: 'Georgia', serif;
       color: #000;
     }
 
-    .page-list {
-      list-style: none;
-      padding: 0;
-      margin: 0;
+    .company-info {
+      font-size: 1.2em;
+      color: #666;
+      margin-bottom: 40px;
+      font-weight: 300;
     }
 
-    .page-list li {
-      margin-bottom: 12px;
+    .intro-section p {
+      font-size: 1.1em;
+      color: #333;
+      line-height: 1.9;
+      margin-bottom: 25px;
     }
 
-    .page-list a {
+    .intro-section h2 {
+      font-size: 2em;
+      font-weight: 400;
+      line-height: 1.3;
+      margin-top: 60px;
+      margin-bottom: 20px;
+      color: #000;
+      font-family: 'Georgia', serif;
+    }
+
+    .intro-section h2:first-of-type {
+      margin-top: 30px;
+    }
+
+    .intro-section h3 {
+      font-size: 1.5em;
+      font-weight: 400;
+      line-height: 1.4;
+      margin-top: 40px;
+      margin-bottom: 15px;
+      color: #000;
+      font-family: 'Georgia', serif;
+    }
+
+    .intro-section h3 a {
       color: #000;
       text-decoration: none;
-      font-size: 1.1em;
       transition: opacity 0.2s;
-      display: inline-block;
     }
 
-    .page-list a:hover {
+    .intro-section h3 a:hover {
       opacity: 0.6;
       text-decoration: underline;
+    }
+
+    .intro-section ul {
+      margin: 20px 0;
+      padding-left: 30px;
+    }
+
+    .intro-section li {
+      margin-bottom: 12px;
+      line-height: 1.8;
+      color: #333;
     }
 
     .back-link {
@@ -209,6 +220,22 @@
 
     .back-link:hover {
       opacity: 0.7;
+    }
+
+    /* 评论区域样式 */
+    .comments-section {
+      max-width: 1200px;
+      margin: 60px auto 0;
+      padding: 0 20px;
+    }
+
+    .comments-section .giscus {
+      margin-top: 40px;
+    }
+
+    .comments-section .giscus-frame {
+      border-radius: 8px;
+      overflow: hidden;
     }
 
     /* Footer */
@@ -252,18 +279,16 @@
   <header>
     <div class="header-container">
       <div class="logo-container">
-        <a href="../index.html">
-          <div class="logo-text-container">
-            <div class="logo-text">Cosmos of WW</div>
-            <div class="logo-subtitle">Along with Probability</div>
-          </div>
-        </a>
+        <div class="logo-text-container">
+          <div class="logo-text">Cosmos of WW</div>
+          <div class="logo-subtitle">Along with Probability</div>
+        </div>
       </div>
       <nav>
         <ul>
           <li><a href="../index.html">首页</a></li>
           <li><a href="../about/">关于我</a></li>
-          <li><a href="./" class="active">投资记录</a></li>
+          <li><a href="../investment/">投资记录</a></li>
           <li><a href="../thinking/">思维漫步</a></li>
           <li>
             <select id="lang-switcher">
@@ -278,22 +303,27 @@
 
   <main>
     <section class="intro-section">
-      <h1>投资记录</h1>
-
-      <div class="about-links">
-        <div class="about-section">
-          <ul class="page-list">
-            <li><a href="my-view.html">我对投资的看法</a></li>
-            <li><a href="position-analysis.html">我的持仓分析</a></li>
-            <li><a href="options-learning.html">期权学习</a></li>
-            <li><a href="industry-analysis.html">行业分析</a></li>
-            <li><a href="company-analysis.html">公司分析</a></li>
-            <li><a href="rklb-analysis.html">火箭实验室 (RKLB) 分析</a></li>
-          </ul>
-        </div>
+      <h1>火箭实验室 (RKLB)</h1>
+      <div class="company-info">
+        股票代码: RKLB | Rocket Lab USA, Inc.
       </div>
 
-      <a href="../index.html" class="back-link">← 返回首页</a>
+      <h2>管理层</h2>
+      <h3><a href="https://www.youtube.com/watch?v=wiaCG19OhWU&amp;t=1s" target="_blank" rel="noopener noreferrer">Interview with Rocket Lab CEO: A 10 Year Plan to Win Space访谈笔记</a></h3>
+      <ul>
+      <li>问题：what doubt dose you have on you and your work<br>It is important to listen to doulbe, becase you should be ready for the opportunity that you are wrong. I come from southest of New Zealand where zero space industry. I should be on a farm, milking cows somewhere. Not much of effect from doubt.</li>
+      <li>问题：关于上大学<br>第一选择，还是想上大学。但奥克兰大学，没办法提供他所需要的。工程师，能早出自己设计的东西，很重要。但真正产出规模效应，是从2013、2014 年左右，Khosla Ventures提供的资金开始。在此之前，只是个10个人以内的小公司。</li>
+      <li>问题：公司的产品，从测试，到成型，有哪些过程<br>We like fail fast，but we never like to fail fast at a big scale. 在一些关键环节，可以允许subscale。some folks have the resources to be able fail fast at a big scale, we've just never had those resouces.  我们应该 expeditious</li>
+      <li>关于招聘<br>我们一直资源短缺。但绝不会降低标注。人力部门说，进Harvard，比进入RKLB容易两倍。</li>
+      <li>考虑给Rocket Lab改名吗？<br>如果要重新命名，可能叫Space Lab什么的刚好。但我们不会改名了。这个名字有一个缘由。首先是火箭，那是我刚开始弄得玩意。其次为啥叫lab？因为在新西兰，你说自己要造火箭，那绝对会被人认为是个疯子。所以我用lab中和了下。</li>
+      </ul>
+
+      <a href="../investment/" class="back-link">← 返回投资记录</a>
+    </section>
+
+    <!-- 评论区域 -->
+    <section class="comments-section">
+      <div class="giscus"></div>
     </section>
   </main>
 
@@ -302,6 +332,22 @@
   </footer>
 
   <script src="../js/lang-switcher.js"></script>
+  <!-- Giscus 评论系统 -->
+  <script src="https://giscus.app/client.js"
+          data-repo="cosmos-wonder/cosmos-wonder.github.io"
+          data-repo-id="R_kgDOQkSejw"
+          data-category="General"
+          data-category-id="DIC_kwDOQkSej84CzySo"
+          data-mapping="pathname"
+          data-strict="0"
+          data-reactions-enabled="1"
+          data-emit-metadata="0"
+          data-input-position="bottom"
+          data-theme="preferred_color_scheme"
+          data-lang="zh-CN"
+          crossorigin="anonymous"
+          async>
+  </script>
 </body>
 </html>
 
